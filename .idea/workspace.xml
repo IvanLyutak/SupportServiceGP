@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="bee59499-3610-4f00-96a9-a97db079d1f5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/pages/OperationCenter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/OperationCenter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/pages/ParkingAttendance.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/ParkingAttendance.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/pages/Transactions.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/Transactions.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/pages/Transactions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/Transactions.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +22,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../СТРОЙЛАД/ProjectFilesLast/845rework" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -38,9 +38,9 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1644307788031">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1644782228714">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1644307788031" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1644782228714" />
   </component>
 </project>

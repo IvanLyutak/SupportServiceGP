@@ -12,6 +12,11 @@ class Transactions extends React.Component{
       super();
       this.state = { data_table: {}}
       this.find = this.find.bind(this);
+
+       this.pad = function(i) { return (i < 10) ? '0' + i : i; };
+       this.current_date = new Date();
+       this.current_year_month = this.current_date.getFullYear() + '-' +
+                this.pad(this.current_date.getMonth() + 1)
    }
    find() {
       console.log("Click")
@@ -49,12 +54,12 @@ class Transactions extends React.Component{
             data_table: {
               columns: [
                 {
-                  label: 'Номер авто',
+                  label: 'Госномер авто',
                   field: 'number_auto',
                   sort: 'asc'
                 },
                 {
-                  label: 'Сумма',
+                  label: 'Сумма, руб',
                   field: 'price',
                   sort: 'asc'
                 },
@@ -62,6 +67,7 @@ class Transactions extends React.Component{
                   label: 'Время платного бронирования',
                   field: 'time_retention',
                   sort: 'asc'
+
                 },
                 {
                   label: 'Время нахождения на паркинге',
@@ -89,7 +95,7 @@ class Transactions extends React.Component{
                      <option value="Москва, Покровский бульвар, 11">Москва, Покровский бульвар, 11</option>
                   </Form.Select>
                   <div className="date"> Дата </div>
-                  <div className="date-input"><input type="month" className="date-input-month" id="input_date" defaultValue="2021-11"/></div>
+                  <div className="date-input"><input type="month" className="date-input-month" id="input_date" defaultValue={this.current_year_month}/></div>
                   <Button variant='size' type="button" className="btn-find" onClick={this.find}>
                      Найти
                   </Button>
