@@ -19,6 +19,7 @@ class ParkingAttendance extends React.Component{
         onValue(starCountRef, (snapshot) => {
             const data = Object.keys(snapshot.val()).map(k=>(snapshot.val()[k]))
 
+            var pad = function(i) { return (i < 10) ? '0' + i : i; };
 
             for (const elem of data) {
             
@@ -26,7 +27,7 @@ class ParkingAttendance extends React.Component{
               elem["time_arrive"] = (elem["time_arrive"]).split('.')[0]
               elem["time_exit"] = (elem["time_exit"]).split('.')[0]
 
-              var pad = function(i) { return (i < 10) ? '0' + i : i; };
+
 
               var local_time_reservation = new Date(elem["time_reservation"] + ' UTC');
               var local_time_arrive = new Date(elem["time_arrive"] + ' UTC');

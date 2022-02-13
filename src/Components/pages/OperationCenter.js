@@ -42,10 +42,20 @@ class OperationCenter extends React.Component{
          elem = document.getElementsByClassName('nameParking'); 
          elem[0].innerHTML = address
          var load_data = [];
+         var pad = function(i) { return (i < 10) ? '0' + i : i; };
+
          for (const [key, value] of Object.entries(snapshot.val()["error_server"])) {
-            console.log(key)
+            value["time"] = (value["time"]).split('.')[0]
+            var local_time = new Date(value["time"] + ' UTC');
+            value["time"] = local_time.getFullYear() + '-' +
+                pad(local_time.getMonth() + 1) + '-' + pad(local_time.getDate()) + ' '
+                + pad(local_time.getHours()) + ':' + pad(local_time.getMinutes()) + ':' +
+                pad(local_time.getSeconds());
+
             load_data.push(value)
          }
+
+
          console.log(load_data)
          this.setState({
             data_table: {
