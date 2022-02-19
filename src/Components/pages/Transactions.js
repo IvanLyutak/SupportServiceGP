@@ -6,7 +6,6 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue} from "firebase/database";
 import firebaseConfig from "../../FirebaseConfig";
 
-
 class Transactions extends React.Component{
    constructor(){
       super();
@@ -27,7 +26,6 @@ class Transactions extends React.Component{
       const starCountRef = ref(db, 'parking_balances/'+address+"/"+date+"/");
 
       onValue(starCountRef, (snapshot) => {
-         console.log(snapshot.val())
          if(snapshot.val() == null){
             var elem = document.getElementsByClassName('address'); 
             elem[0].innerHTML = "Нет данных"
@@ -46,10 +44,8 @@ class Transactions extends React.Component{
 
          var load_data = [];
          for (const [key, value] of Object.entries(snapshot.val()["report"])) {
-            console.log(key)
             load_data.push(value)
          }
-         console.log(load_data)
          this.setState({
             data_table: {
               columns: [

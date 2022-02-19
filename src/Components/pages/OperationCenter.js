@@ -1,6 +1,6 @@
 import React from 'react'
 import "./OperationCenter.css"
-import { Form } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import TableOperationCenter from './TableOperationCenter';
 import TablePage from './TableListParking';
 import { YMaps, Map, Placemark, Clusterer} from 'react-yandex-maps';
@@ -8,6 +8,9 @@ import { YMaps, Map, Placemark, Clusterer} from 'react-yandex-maps';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue} from "firebase/database";
 import firebaseConfig from "../../FirebaseConfig";
+
+import connectionVPN from '../../services/connectionVPN';
+import snmpRequest from '../../services/snmpRequest';
 
 const getPointOptions = () => {
   return {
@@ -21,13 +24,25 @@ class OperationCenter extends React.Component{
       this.state = { data_table: {}}
       this.onMapClick = this.onMapClick.bind(this);
       this.find = this.find.bind(this);
+      this.reboot = this.reboot.bind(this);
       this.find_coordinates_address = this.find_coordinates_address.bind(this);
     }
+
+    //Перезагрузка сервера
+    reboot(nameVPN, ipAddress){
+      connectionVPN(nameVPN, function (check) {
+        if (check !== "error") {
+           snmpRequest(ipAddress, 161, ".1.3.6.1.4.1.25728.5800.3.1.3.1", "SET", 0)
+           setTimeout(() => {  snmpRequest(ipAddress, 161, ".1.3.6.1.4.1.25728.5800.3.1.3.1", "SET", 1) }, 5000);
+        }
+     })
+    }
+
     find(address, coords){
-      console.log(address)
       if (this.props.map.current) {
         this.props.map.current.panTo(coords);
       }
+
       const db = getDatabase(initializeApp(firebaseConfig));
       const starCountRef = ref(db, 'operation_center/'+address+"/");
 
@@ -39,6 +54,10 @@ class OperationCenter extends React.Component{
             console.log("Error");
             return;
          }
+
+        //Пример вызова метода перезагрузки сервера
+        //this.reboot(snapshot.val()["nameVPN"], snapshot.val()["ipAddress"]) // nameVPN = GeneralParking, ipAddress = 192.168.0.100
+
          elem = document.getElementsByClassName('nameParking'); 
          elem[0].innerHTML = address
          var load_data = [];
@@ -54,7 +73,6 @@ class OperationCenter extends React.Component{
 
             load_data.push(value)
          }
-
 
          console.log(load_data)
          this.setState({
