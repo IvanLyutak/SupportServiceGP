@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useImperativeHandle } from 'react'
 import "./OperationCenter.css"
 import { Form, Button } from 'react-bootstrap'
 import TableOperationCenter from './TableOperationCenter';
@@ -14,18 +14,11 @@ import snmpRequest from '../../services/snmpRequest';
 
 import Modal from './OperationCenterModal';
 
-const { forwardRef, useRef, useImperativeHandle } = React;
-
 const getPointOptions = () => {
   return {
     preset: "islands#yellowIcon"
   };
 };
-
-
-
-
-
 
 class OperationCenter extends React.Component{
     constructor(){
@@ -38,7 +31,9 @@ class OperationCenter extends React.Component{
 
       this.reboot_server = this.reboot_server.bind(this);
 
-      this.child = React.createRef();
+      this.state = {
+        isModal: false
+      };
     }
 
     //Перезагрузка сервера
@@ -54,7 +49,7 @@ class OperationCenter extends React.Component{
 
     reboot_server(){
       console.log('hello test')
-      this.child.current.onOpen()
+      this.setState({ isModal: true})
 
     }
 
@@ -140,7 +135,9 @@ class OperationCenter extends React.Component{
       this.find(this.find_coordinates_address(coords), coords)
     }
 
-
+    onClose = () => {
+      this.setState({ isModal: false})
+    }
 
    render(){
 
@@ -152,9 +149,13 @@ class OperationCenter extends React.Component{
               <>
             <Form className="col-2-5">
               <div className="col-2-5-1">
-
-
-                <ModalComponent ref={this.child}/>
+                <Modal
+                  visible={this.state.isModal}
+                  title='Заголовок'
+                  content={<p>Что-то важное</p>}
+                  footer={<button onClick={this.onClose}>Закрыть</button>}
+                  onClose={this.onClose}
+                 />
 
                 <div className="col-2-5-1-1">
                   <TablePage find={this.find} reboot_server={this.reboot_server}/>
@@ -206,31 +207,3 @@ class OperationCenter extends React.Component{
    }
 }
 export default OperationCenter
-
-
-
-
-const ModalComponent = (props, ref) => {
-
-useImperativeHandle(ref, () => ({
-    onOpen() {
-      setModal(true)
-    }
-  }));
-
-  const [isModal, setModal] = React.useState(false)
-  const onClose = () => setModal(false)
-
-  return (
-    <React.Fragment>
-      <button onClick={() => setModal(true)}>Клик-клик-клик</button>
-      <Modal
-        visible={isModal}
-        title='Заголовок'
-        content={<p>Что-то важное</p>}
-        footer={<button onClick={onClose}>Закрыть</button>}
-        onClose={onClose}
-      />
-    </React.Fragment>
-  )
-}
