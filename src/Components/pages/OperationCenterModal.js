@@ -1,33 +1,23 @@
-import React, { ReactElement } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import './OperationCenterModal.css'
 
-
-// интерфейс для пропсов
-interface ModalProps {
-  visible: boolean,
-  title: string,
-  content: ReactElement | string,
-  footer: ReactElement | string,
-  onClose: () => void
-}
-
-
 const Modal = ({
-  visible = false,
-  title = '',
-  content = '',
-  footer = '',
-  onClose,
-}: ModalProps) => {
+      visible = false,
+      title = '',
+      content = '',
+      footer = '',
+      onClose,
+  }) => {
   // создаем обработчик нажатия клавиши Esc
-  const onKeydown = ({ key }: KeyboardEvent) => {
+  const onKeydown = ({ key }) => {
     switch (key) {
-      case 'Escape':
-        onClose()
-        break
+        case "Escape":
+          onClose();
+          break;
+        default:
+          break;
     }
-  }
+  };
 
 
  React.useEffect(() => {
