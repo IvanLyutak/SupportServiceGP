@@ -1,11 +1,11 @@
 import React from 'react';
-import { MDBBtn, MDBTable, MDBTableBody} from 'mdbreact';
+import { MDBBtn, MDBTable, MDBTableBody, MDBIcon} from 'mdbreact';
 
 const TablePage = (props) => {
 
   const rows_regular_btn = [
     {
-      'indicator': [<i key="cell1" className="fa fa-circle mr-2 red-text" aria-hidden="true"></i>],
+      'indicator': <MDBBtn tag="a" size="sm" color="danger" onClick={() => props.reboot_server()}><MDBIcon icon="redo-alt" /></MDBBtn>,
       'nameparking': 'Покровский бульвар, 11',
       'handle': <MDBBtn color="yellow" size="sm" onClick={() => props.find('Москва, Покровский бульвар, 11', [55.754096, 37.649238])}>Смотреть</MDBBtn>
     },

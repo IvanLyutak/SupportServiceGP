@@ -12,11 +12,20 @@ import firebaseConfig from "../../FirebaseConfig";
 import connectionVPN from '../../services/connectionVPN';
 import snmpRequest from '../../services/snmpRequest';
 
+import Modal from './OperationCenterModal';
+
+const { forwardRef, useRef, useImperativeHandle } = React;
+
 const getPointOptions = () => {
   return {
     preset: "islands#yellowIcon"
   };
 };
+
+
+
+
+
 
 class OperationCenter extends React.Component{
     constructor(){
@@ -26,6 +35,10 @@ class OperationCenter extends React.Component{
       this.find = this.find.bind(this);
       this.reboot = this.reboot.bind(this);
       this.find_coordinates_address = this.find_coordinates_address.bind(this);
+
+      this.reboot_server = this.reboot_server.bind(this);
+
+      this.child = React.createRef();
     }
 
     //Перезагрузка сервера
@@ -37,6 +50,14 @@ class OperationCenter extends React.Component{
         }
      })
     }
+
+
+    reboot_server(){
+      console.log('hello test')
+      this.child.current.onOpen()
+
+    }
+
 
     find(address, coords){
       if (this.props.map.current) {
@@ -99,6 +120,8 @@ class OperationCenter extends React.Component{
          })    
       });
     }
+
+
     find_coordinates_address(coords){
       switch (coords[0]+"-"+coords[1]) {
         case '55.734157-37.568201':
@@ -109,12 +132,18 @@ class OperationCenter extends React.Component{
           return ""
       }
     }
+
+
     onMapClick = (e) => {
       const coords = e.get("target")["geometry"]["_coordinates"];
       console.log(coords)
       this.find(this.find_coordinates_address(coords), coords)
     }
+
+
+
    render(){
+
     return (
       <>
           {(JSON.parse(localStorage.getItem('user')) === false) ? (
@@ -123,8 +152,12 @@ class OperationCenter extends React.Component{
               <>
             <Form className="col-2-5">
               <div className="col-2-5-1">
+
+
+                <ModalComponent ref={this.child}/>
+
                 <div className="col-2-5-1-1">
-                  <TablePage find={this.find}/>
+                  <TablePage find={this.find} reboot_server={this.reboot_server}/>
                 </div>
                 <div className="col-2-5-1-2">
                   <YMaps>
@@ -173,3 +206,31 @@ class OperationCenter extends React.Component{
    }
 }
 export default OperationCenter
+
+
+
+
+const ModalComponent = (props, ref) => {
+
+useImperativeHandle(ref, () => ({
+    onOpen() {
+      setModal(true)
+    }
+  }));
+
+  const [isModal, setModal] = React.useState(false)
+  const onClose = () => setModal(false)
+
+  return (
+    <React.Fragment>
+      <button onClick={() => setModal(true)}>Клик-клик-клик</button>
+      <Modal
+        visible={isModal}
+        title='Заголовок'
+        content={<p>Что-то важное</p>}
+        footer={<button onClick={onClose}>Закрыть</button>}
+        onClose={onClose}
+      />
+    </React.Fragment>
+  )
+}

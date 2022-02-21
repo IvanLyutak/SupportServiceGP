@@ -1,0 +1,59 @@
+Index: src/Components/pages/OperationCenter.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React from 'react'\r\nimport \"./OperationCenter.css\"\r\nimport { Form } from 'react-bootstrap'\r\nimport TableOperationCenter from './TableOperationCenter';\r\nimport TablePage from './TableListParking';\r\nimport { YMaps, Map, Placemark, Clusterer} from 'react-yandex-maps';\r\n\r\nimport { initializeApp } from 'firebase/app';\r\nimport { getDatabase, ref, onValue} from \"firebase/database\";\r\nimport firebaseConfig from \"../../FirebaseConfig\";\r\n\r\nconst getPointOptions = () => {\r\n  return {\r\n    preset: \"islands#yellowIcon\"\r\n  };\r\n};\r\n\r\nclass OperationCenter extends React.Component{\r\n    constructor(){\r\n      super();\r\n      this.state = { data_table: {}}\r\n      this.onMapClick = this.onMapClick.bind(this);\r\n      this.find = this.find.bind(this);\r\n      this.find_coordinates_address = this.find_coordinates_address.bind(this);\r\n    }\r\n    find(address, coords){\r\n      console.log(address)\r\n      if (this.props.map.current) {\r\n        this.props.map.current.panTo(coords);\r\n      }\r\n      const db = getDatabase(initializeApp(firebaseConfig));\r\n      const starCountRef = ref(db, 'operation_center/'+address+\"/\");\r\n\r\n      onValue(starCountRef, (snapshot) => {\r\n         if(snapshot.val() == null){\r\n            this.setState({ data_table: {}})\r\n            var elem = document.getElementsByClassName('nameParking'); \r\n            elem[0].innerHTML = \"\"\r\n            console.log(\"Error\");\r\n            return;\r\n         }\r\n         elem = document.getElementsByClassName('nameParking'); \r\n         elem[0].innerHTML = address\r\n         var load_data = [];\r\n         var pad = function(i) { return (i < 10) ? '0' + i : i; };\r\n\r\n         for (const [key, value] of Object.entries(snapshot.val()[\"error_server\"])) {\r\n            value[\"time\"] = (value[\"time\"]).split('.')[0]\r\n            var local_time = new Date(value[\"time\"] + ' UTC');\r\n            value[\"time\"] = local_time.getFullYear() + '-' +\r\n                pad(local_time.getMonth() + 1) + '-' + pad(local_time.getDate()) + ' '\r\n                + pad(local_time.getHours()) + ':' + pad(local_time.getMinutes()) + ':' +\r\n                pad(local_time.getSeconds());\r\n\r\n            load_data.push(value)\r\n         }\r\n\r\n\r\n         console.log(load_data)\r\n         this.setState({\r\n            data_table: {\r\n              columns: [\r\n                {\r\n                  label: 'Дата',\r\n                  field: 'time',\r\n                  sort: 'asc'\r\n                },\r\n                {\r\n                  label: 'Тип сообщения',\r\n                  field: 'type',\r\n                  sort: 'asc'\r\n                },\r\n                {\r\n                  label: 'Текст сообщения',\r\n                  field: 'text',\r\n                  sort: 'asc'\r\n                }\r\n              ],\r\n              rows: load_data.reverse()\r\n            }\r\n         })    \r\n      });\r\n    }\r\n    find_coordinates_address(coords){\r\n      switch (coords[0]+\"-\"+coords[1]) {\r\n        case '55.734157-37.568201':\r\n          return 'Большой Саввинский переулок, 11'\r\n        case '55.754096-37.649238':\r\n          return 'Москва, Покровский бульвар, 11'\r\n        default:\r\n          return \"\"\r\n      }\r\n    }\r\n    onMapClick = (e) => {\r\n      const coords = e.get(\"target\")[\"geometry\"][\"_coordinates\"];\r\n      console.log(coords)\r\n      this.find(this.find_coordinates_address(coords), coords)\r\n    }\r\n   render(){\r\n    return (\r\n      <>\r\n          {(JSON.parse(localStorage.getItem('user')) === false) ? (\r\n            <div className=\"welcome-user\"> Авторизуйтесь! </div>\r\n            ) : (\r\n              <>\r\n            <Form className=\"col-2-5\">\r\n              <div className=\"col-2-5-1\">\r\n                <div className=\"col-2-5-1-1\">\r\n                  <TablePage find={this.find}/>\r\n                </div>\r\n                <div className=\"col-2-5-1-2\">\r\n                  <YMaps>\r\n                      <Map \r\n                        defaultState={{ center: [55.73, 37.60], zoom: 10 }} \r\n                        width='100%' \r\n                        height='298px' \r\n                        instanceRef={this.props.map}\r\n                      >\r\n                        <Clusterer\r\n                          options={{\r\n                            preset: \"islands#invertedYellowClusterIcons\",\r\n                            groupByCoordinates: false,\r\n                            clusterDisableClickZoom: true,\r\n                            clusterHideIconOnBalloonOpen: false,\r\n                            geoObjectHideIconOnBalloonOpen: false\r\n                          }}\r\n                        >\r\n                          <Placemark \r\n                            geometry={[55.734157, 37.568201]} \r\n                            onClick={this.onMapClick}\r\n                            options={getPointOptions()}\r\n                          />\r\n                          <Placemark \r\n                            geometry={[55.754096, 37.649238]} \r\n                            onClick={this.onMapClick}\r\n                            options={getPointOptions()}/>\r\n                        </Clusterer>\r\n                      </Map>\r\n                  </YMaps>\r\n                </div>\r\n              </div>\r\n            </Form>\r\n            <Form className=\"col-3-5\">\r\n                <div className=\"col-3-5-1\">\r\n                  <div className=\"nameParking\"></div>\r\n                  <div className=\"col-3-5-1-1\">\r\n                    <TableOperationCenter data_table={this.state.data_table}/>\r\n                  </div>\r\n               </div>\r\n            </Form>\r\n            </>\r\n            )};\r\n        </>\r\n    );\r\n   }\r\n}\r\nexport default OperationCenter
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/Components/pages/OperationCenter.js	(revision 01a54160c661817903fa83cb5920db3f35bb8294)
++++ src/Components/pages/OperationCenter.js	(date 1644866387602)
+@@ -81,6 +81,8 @@
+          })    
+       });
+     }
++
++
+     find_coordinates_address(coords){
+       switch (coords[0]+"-"+coords[1]) {
+         case '55.734157-37.568201':
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"bee59499-3610-4f00-96a9-a97db079d1f5\" name=\"Default Changelist\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Components/pages/Transactions.css\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Components/pages/Transactions.css\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Components/pages/Transactions.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Components/pages/Transactions.js\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"24YqNMEVFZikJokqqybWHdVx2lY\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\r\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/../../../СТРОЙЛАД/ProjectFilesLast/845rework\" />\r\n  </component>\r\n  <component name=\"SvnConfiguration\">\r\n    <configuration />\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"bee59499-3610-4f00-96a9-a97db079d1f5\" name=\"Default Changelist\" comment=\"\" />\r\n      <created>1643817826331</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1643817826331</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"WindowStateProjectService\">\r\n    <state x=\"740\" y=\"275\" key=\"FileChooserDialogImpl\" timestamp=\"1644782228714\">\r\n      <screen x=\"0\" y=\"0\" width=\"1920\" height=\"1040\" />\r\n    </state>\r\n    <state x=\"740\" y=\"275\" key=\"FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040\" timestamp=\"1644782228714\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision 01a54160c661817903fa83cb5920db3f35bb8294)
++++ .idea/workspace.xml	(date 1644926226894)
+@@ -3,8 +3,7 @@
+   <component name="ChangeListManager">
+     <list default="true" id="bee59499-3610-4f00-96a9-a97db079d1f5" name="Default Changelist" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Components/pages/Transactions.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/Transactions.css" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Components/pages/Transactions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/Transactions.js" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Components/pages/OperationCenter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/OperationCenter.js" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -22,7 +21,7 @@
+   <component name="PropertiesComponent">
+     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../СТРОЙЛАД/ProjectFilesLast/845rework" />
++    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../РАБОТА/Progect" />
+   </component>
+   <component name="SvnConfiguration">
+     <configuration />
+@@ -38,9 +37,9 @@
+     <servers />
+   </component>
+   <component name="WindowStateProjectService">
+-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1644782228714">
++    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1644926225529">
+       <screen x="0" y="0" width="1920" height="1040" />
+     </state>
+-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1644782228714" />
++    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1644926225529" />
+   </component>
+ </project>
+\ No newline at end of file
