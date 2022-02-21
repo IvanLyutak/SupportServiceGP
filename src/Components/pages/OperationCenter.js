@@ -23,17 +23,16 @@ const getPointOptions = () => {
 class OperationCenter extends React.Component{
     constructor(){
       super();
-      this.state = { data_table: {}}
+      this.state = { 
+        data_table: {},
+        isModal: false
+      }
       this.onMapClick = this.onMapClick.bind(this);
       this.find = this.find.bind(this);
       this.reboot = this.reboot.bind(this);
       this.find_coordinates_address = this.find_coordinates_address.bind(this);
 
       this.reboot_server = this.reboot_server.bind(this);
-
-      this.state = {
-        isModal: false
-      };
     }
 
     //Перезагрузка сервера
