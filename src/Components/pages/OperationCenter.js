@@ -61,7 +61,7 @@ class OperationCenter extends React.Component{
       const starCountRef = ref(db, 'operation_center/'+address+"/");
 
       onValue(starCountRef, (snapshot) => {
-         if(snapshot.val() == null){
+         if(snapshot.val() == null || !("error_server" in snapshot.val())){
             this.setState({ data_table: {}})
             var elem = document.getElementsByClassName('nameParking'); 
             elem[0].innerHTML = ""
