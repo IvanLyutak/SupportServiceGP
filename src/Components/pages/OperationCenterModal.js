@@ -30,8 +30,8 @@ const Modal = ({
 
   // или возвращаем верстку модального окна
   return (
-    <div className='modal' onClick={onClose}>
-      <div className='modal-dialog' onClick={e => e.stopPropagation()}>
+    <div className='modal'>
+      <div className='modal-d' onClick={e => e.stopPropagation()}>
         <div className='modal-header'>
           <h3 className='modal-title'>{title}</h3>
           <span className='modal-close' onClick={onClose}>

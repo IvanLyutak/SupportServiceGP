@@ -49,6 +49,7 @@ class OperationCenter extends React.Component{
     reboot_server(){
       console.log('hello test')
       this.setState({ isModal: true})
+      //this.reboot("GeneralParking", "192.168.133.26")
     }
 
 
