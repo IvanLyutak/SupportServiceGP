@@ -23,7 +23,7 @@ const getPointOptions = () => {
 class OperationCenter extends React.Component{
     constructor(){
       super();
-      this.state = { 
+      this.state = {
         data_table: {},
         isModal: false
       }
@@ -64,7 +64,7 @@ class OperationCenter extends React.Component{
       onValue(starCountRef, (snapshot) => {
          if(snapshot.val() == null || !("error_server" in snapshot.val())){
             this.setState({ data_table: {}})
-            var elem = document.getElementsByClassName('nameParking'); 
+            var elem = document.getElementsByClassName('nameParking');
             elem[0].innerHTML = ""
             console.log("Error");
             return;
@@ -73,7 +73,7 @@ class OperationCenter extends React.Component{
         //Пример вызова метода перезагрузки сервера
         //this.reboot(snapshot.val()["nameVPN"], snapshot.val()["ipAddress"]) // nameVPN = GeneralParking, ipAddress = 192.168.0.100
 
-         elem = document.getElementsByClassName('nameParking'); 
+         elem = document.getElementsByClassName('nameParking');
          elem[0].innerHTML = address
          var load_data = [];
          var pad = function(i) { return (i < 10) ? '0' + i : i; };
@@ -111,7 +111,7 @@ class OperationCenter extends React.Component{
               ],
               rows: load_data.reverse()
             }
-         })    
+         })
       });
     }
 
@@ -138,6 +138,28 @@ class OperationCenter extends React.Component{
       this.setState({ isModal: false})
     }
 
+
+    onConfirmModal = () => {
+      let password = document.getElementById("formBasicPassword").value;
+      this.setState({ isModal: false})
+      console.log(password);
+
+      if (document.getElementById('radio-1').checked) {
+        let radio_value = document.getElementById('radio-1').value;
+        console.log(radio_value)
+
+       } else if (document.getElementById('radio-2').checked) {
+        let radio_value = document.getElementById('radio-2').value;
+        console.log(radio_value)
+
+       }
+
+
+
+
+    }
+
+
    render(){
 
     return (
@@ -150,9 +172,43 @@ class OperationCenter extends React.Component{
               <div className="col-2-5-1">
                 <Modal
                   visible={this.state.isModal}
-                  title='Заголовок'
-                  content={<p>Что-то важное</p>}
-                  footer={<button onClick={this.onClose}>Закрыть</button>}
+                  title='Выберите действие'
+                  content={
+
+                  <div>
+
+
+
+                    <div class="radio">
+                        <input id="radio-1" value="server reboot" name="radio" type="radio"/>
+                        <label for="radio-1" class="radio-label">Перезагрузка сервера</label>
+                    </div>
+
+                    <div class="radio">
+                        <input id="radio-2" value="relay reboot" name="radio" type="radio"/>
+                        <label  for="radio-2" class="radio-label">Перезагрузка реле шлагбаума</label>
+                    </div>
+
+
+
+
+
+
+                  <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Пароль админа</Form.Label>
+                    <Form.Control type="password" placeholder="Password"/>
+                  </Form.Group>
+
+
+                  </div>
+                  }
+                  footer={
+                  <div>
+                      <button className="mr-2" onClick={this.onClose}>Закрыть</button>
+                      <button onClick={this.onConfirmModal}>Применить</button>
+                  </div>
+                  }
+
                   onClose={this.onClose}
                  />
 
@@ -161,10 +217,10 @@ class OperationCenter extends React.Component{
                 </div>
                 <div className="col-2-5-1-2">
                   <YMaps>
-                      <Map 
-                        defaultState={{ center: [55.73, 37.60], zoom: 10 }} 
-                        width='100%' 
-                        height='298px' 
+                      <Map
+                        defaultState={{ center: [55.73, 37.60], zoom: 10 }}
+                        width='100%'
+                        height='298px'
                         instanceRef={this.props.map}
                       >
                         <Clusterer
@@ -176,13 +232,13 @@ class OperationCenter extends React.Component{
                             geoObjectHideIconOnBalloonOpen: false
                           }}
                         >
-                          <Placemark 
-                            geometry={[55.734157, 37.568201]} 
+                          <Placemark
+                            geometry={[55.734157, 37.568201]}
                             onClick={this.onMapClick}
                             options={getPointOptions()}
                           />
-                          <Placemark 
-                            geometry={[55.754096, 37.649238]} 
+                          <Placemark
+                            geometry={[55.754096, 37.649238]}
                             onClick={this.onMapClick}
                             options={getPointOptions()}/>
                         </Clusterer>
