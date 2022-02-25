@@ -15,6 +15,9 @@ function request(dispatch){
       var check = 0
       off(starCountRef)
       onValue(starCountRef, (snapshot) => {
+        if(snapshot.val() == null){
+          return;
+        }
         console.log('observer')
         console.log(snapshot.val())
         const massiv = snapshot.val()

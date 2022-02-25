@@ -53,8 +53,19 @@
     font-weight: 600;
 }
 
+.btn_close {
+    background: rgb(204, 204, 204);
+    color: white;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
 
-
+.btn_reboot {
+    background: rgb(255, 204, 0);
+    color: white;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
 
 $color1: #f4f4f4;
 $color2: #3197EE;

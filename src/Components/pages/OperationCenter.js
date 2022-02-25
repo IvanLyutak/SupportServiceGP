@@ -1,6 +1,6 @@
 import React from 'react'
 import "./OperationCenter.css"
-import { Form } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import TableOperationCenter from './TableOperationCenter';
 import TablePage from './TableListParking';
 import { YMaps, Map, Placemark, Clusterer} from 'react-yandex-maps';
@@ -13,6 +13,7 @@ import connectionVPN from '../../services/connectionVPN';
 import snmpRequest from '../../services/snmpRequest';
 
 import Modal from './OperationCenterModal';
+import { MDBBtn, MDBIcon} from 'mdbreact';
 
 const getPointOptions = () => {
   return {
@@ -25,31 +26,56 @@ class OperationCenter extends React.Component{
       super();
       this.state = {
         data_table: {},
-        isModal: false
+        isModal: false,
+        parking_list: []
       }
       this.onMapClick = this.onMapClick.bind(this);
       this.find = this.find.bind(this);
       this.reboot = this.reboot.bind(this);
       this.find_coordinates_address = this.find_coordinates_address.bind(this);
-
       this.reboot_server = this.reboot_server.bind(this);
     }
+
+
+    componentDidMount() {
+      const db = getDatabase(initializeApp(firebaseConfig));
+      const starCountRef = ref(db, 'operation_center/parking_address/');
+
+      onValue(starCountRef, (snapshot) => {
+        if (snapshot.val() == null){
+          return
+        }
+        var dict=[]
+        for (const [key, value] of Object.entries(snapshot.val())) {
+            dict.push({
+              'indicator': <MDBBtn tag="a" size="sm" color="danger" onClick={() => this.reboot_server()}><MDBIcon icon="redo-alt" /></MDBBtn>,
+              'nameparking': key,
+              'handle': <MDBBtn color="yellow" size="sm" onClick={() => this.find(key, [value["lat"], value["lon"]])}>Смотреть</MDBBtn>
+            });
+        }
+        this.setState({ parking_list: dict })
+      })
+    }
+
 
     //Перезагрузка сервера
     reboot(nameVPN, ipAddress){
       connectionVPN(nameVPN, function (check) {
         if (check !== "error") {
-           snmpRequest(ipAddress, 161, ".1.3.6.1.4.1.25728.5800.3.1.3.1", "SET", 0)
-           setTimeout(() => {  snmpRequest(ipAddress, 161, ".1.3.6.1.4.1.25728.5800.3.1.3.1", "SET", 1) }, 5000);
+          console.log("Включить")
+          snmpRequest(ipAddress, 161, ".1.3.6.1.4.1.25728.5800.3.1.3.1", "SET", 0)
+          setTimeout(() => {
+            console.log("Выключить")
+            snmpRequest(ipAddress, 161, ".1.3.6.1.4.1.25728.5800.3.1.3.1", "SET", 1) 
+          }, 5000);
         }
      })
     }
 
 
     reboot_server(){
-      console.log('hello test')
       this.setState({ isModal: true})
-      //this.reboot("GeneralParking", "192.168.133.26")
+      //this.reboot("GeneralParking", "192.168.0.100")
     }
 
 
@@ -57,7 +83,6 @@ class OperationCenter extends React.Component{
       if (this.props.map.current) {
         this.props.map.current.panTo(coords);
       }
-
       const db = getDatabase(initializeApp(firebaseConfig));
       const starCountRef = ref(db, 'operation_center/'+address+"/");
 
@@ -89,7 +114,6 @@ class OperationCenter extends React.Component{
             load_data.push(value)
          }
 
-         console.log(load_data)
          this.setState({
             data_table: {
               columns: [
@@ -147,16 +171,13 @@ class OperationCenter extends React.Component{
       if (document.getElementById('radio-1').checked) {
         let radio_value = document.getElementById('radio-1').value;
         console.log(radio_value)
+        this.reboot("GeneralParking", "192.168.0.100")
 
        } else if (document.getElementById('radio-2').checked) {
         let radio_value = document.getElementById('radio-2').value;
         console.log(radio_value)
 
        }
-
-
-
-
     }
 
 
@@ -174,46 +195,37 @@ class OperationCenter extends React.Component{
                   visible={this.state.isModal}
                   title='Выберите действие'
                   content={
-
-                  <div>
-
-
-
-                    <div class="radio">
+                    <div>
+                      <div className="radio">
                         <input id="radio-1" value="server reboot" name="radio" type="radio"/>
-                        <label for="radio-1" class="radio-label">Перезагрузка сервера</label>
-                    </div>
-
-                    <div class="radio">
+                        <label htmlFor="radio-1" className="radio-label">Перезагрузка сервера</label>
+                      </div>
+                      <div className="radio">
                         <input id="radio-2" value="relay reboot" name="radio" type="radio"/>
-                        <label  for="radio-2" class="radio-label">Перезагрузка реле шлагбаума</label>
+                        <label  htmlFor="radio-2" className="radio-label">Перезагрузка реле шлагбаума</label>
+                      </div>
+                      <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Label>Пароль админа</Form.Label>
+                        <Form.Control type="password" placeholder="Password"/>
+                      </Form.Group>
                     </div>
-
-
-
-
-
-
-                  <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Пароль админа</Form.Label>
-                    <Form.Control type="password" placeholder="Password"/>
-                  </Form.Group>
-
-
-                  </div>
                   }
                   footer={
-                  <div>
-                      <button className="mr-2" onClick={this.onClose}>Закрыть</button>
-                      <button onClick={this.onConfirmModal}>Применить</button>
-                  </div>
+                    <div>
+                        <Button variant='size' type="submit" className="btn_close" onClick={this.onClose}>
+                          Закрыть
+                        </Button>
+                        <Button variant='size' type="submit" className="btn_reboot" onClick={this.onConfirmModal}>
+                          Перезагрузить
+                        </Button>
+                    </div>
                   }
 
                   onClose={this.onClose}
                  />
 
                 <div className="col-2-5-1-1">
-                  <TablePage find={this.find} reboot_server={this.reboot_server}/>
+                  <TablePage find={this.find} reboot_server={this.reboot_server} data={this.state.parking_list}/>
                 </div>
                 <div className="col-2-5-1-2">
                   <YMaps>
