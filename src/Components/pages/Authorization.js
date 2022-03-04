@@ -11,6 +11,7 @@ class Authorization extends React.Component{
         super();
         if (localStorage.getItem('user') === null) {
             localStorage.setItem('user', false);
+
         }
         this.entry = this.entry.bind(this);
      }
@@ -23,6 +24,7 @@ class Authorization extends React.Component{
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             console.log(userCredential)
+
             const db = getDatabase(initializeApp(firebaseConfig));
             const starCountRef = ref(db, 'admins/');
             onValue(starCountRef, (snapshot) => {
@@ -31,6 +33,7 @@ class Authorization extends React.Component{
                 }
                 else if(snapshot.val().includes(email)){
                     const user = userCredential.user;
+                    localStorage.setItem('user_test', JSON.stringify(auth));
                     console.log(user)
                     localStorage.setItem('user', true);
                     var elem = document.getElementsByClassName('error-field'); 
@@ -46,9 +49,10 @@ class Authorization extends React.Component{
         })
         .catch((error) => {
             console.log("error")
-            var elem = document.getElementsByClassName('error-field'); 
+            var elem = document.getElementsByClassName('error-field');
             elem[0].innerHTML = "Неправильная почта или пароль"
         });
+
 
     }
    render(){

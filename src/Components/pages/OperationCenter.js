@@ -14,9 +14,9 @@ import snmpRequest from '../../services/snmpRequest';
 
 import Modal from './OperationCenterModal';
 import { MDBBtn, MDBIcon} from 'mdbreact';
-import { onAuthStateChanged } from "firebase/auth";
 
-//import { User } from "firebase";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 
 const getPointOptions = () => {
   return {
@@ -86,14 +86,24 @@ class OperationCenter extends React.Component{
       let password = document.getElementById("formBasicPassword").value;
 
       console.log(password);
+      let test = JSON.parse(localStorage.getItem('user_test'));
+
+      console.log(test.currentUser);
+      console.log(test.currentUser['email']);
+
+      const auth = getAuth();
 
 
+      signInWithEmailAndPassword(auth, test.currentUser['email'], password)
+        .then((userCredential) => {
+            console.log('111')
 
-      //onAuthStateChanged(function(user) {
-      //  if (user) {
-      //     console.log(user)
-      //  }
-       // });
+            })
+            .catch((error) => {
+            console.log("error")
+        });
+
+
 
 
 
