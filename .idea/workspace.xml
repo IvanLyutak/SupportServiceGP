@@ -19,10 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bee59499-3610-4f00-96a9-a97db079d1f5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_02_2022_11_29__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_02_2022_11_29__Default_Changelist_.xml" afterDir="false" />
+    <list default="true" id="bee59499-3610-4f00-96a9-a97db079d1f5" name="Default Changelist" comment="modal first version">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_02_2022_11_29_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_02_2022_11_29__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/pages/OperationCenter.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/OperationCenter.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/pages/Authorization.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/Authorization.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/pages/OperationCenter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/pages/OperationCenter.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,6 +60,14 @@
       <option name="presentableId" value="Default" />
       <updated>1643817826331</updated>
     </task>
+    <task id="LOCAL-00001" summary="modal first version">
+      <created>1645739014704</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1645739014704</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -73,15 +82,23 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="modal first version" />
+    <option name="LAST_COMMIT_MESSAGE" value="modal first version" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1645690250475">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1646036202530">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1645690250475" />
-    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1645738632146">
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1646036202530" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1645739019728">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1645738632146" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1645739019728" />
+    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1645960562296">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1645960562296" />
     <state x="734" y="233" key="git4idea.branch.GitSmartOperationDialog" timestamp="1645432199892">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

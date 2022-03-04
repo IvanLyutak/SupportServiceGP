@@ -22,7 +22,7 @@ class Authorization extends React.Component{
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // Signed in
+            console.log(userCredential)
             const db = getDatabase(initializeApp(firebaseConfig));
             const starCountRef = ref(db, 'admins/');
             onValue(starCountRef, (snapshot) => {

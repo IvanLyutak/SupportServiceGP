@@ -14,6 +14,9 @@ import snmpRequest from '../../services/snmpRequest';
 
 import Modal from './OperationCenterModal';
 import { MDBBtn, MDBIcon} from 'mdbreact';
+import { onAuthStateChanged } from "firebase/auth";
+
+//import { User } from "firebase";
 
 const getPointOptions = () => {
   return {
@@ -48,7 +51,7 @@ class OperationCenter extends React.Component{
         var dict=[]
         for (const [key, value] of Object.entries(snapshot.val())) {
             dict.push({
-              'indicator': <MDBBtn tag="a" size="sm" color="danger" onClick={() => this.reboot_server()}><MDBIcon icon="redo-alt" /></MDBBtn>,
+              'indicator': <MDBBtn tag="a" size="sm" color="danger" onClick={() => this.reboot_server(key, [value["ipAddress"], value["nameVPN"]])}><MDBIcon icon="redo-alt" /></MDBBtn>,
               'nameparking': key,
               'handle': <MDBBtn color="yellow" size="sm" onClick={() => this.find(key, [value["lat"], value["lon"]])}>Смотреть</MDBBtn>
             });
@@ -73,10 +76,41 @@ class OperationCenter extends React.Component{
     }
 
 
-    reboot_server(){
+    reboot_server(address, value){
       this.setState({ isModal: true})
-      //this.reboot("GeneralParking", "192.168.0.100")
+      this.address = address;
+      this.value = value;
     }
+
+    onConfirmModal = () => {
+      let password = document.getElementById("formBasicPassword").value;
+
+      console.log(password);
+
+
+
+      //onAuthStateChanged(function(user) {
+      //  if (user) {
+      //     console.log(user)
+      //  }
+       // });
+
+
+
+      this.setState({ isModal: false})
+
+      if (document.getElementById('radio-1').checked) {
+        let radio_value = document.getElementById('radio-1').value;
+
+        this.reboot(this.value[1], this.value[0]);
+
+       } else if (document.getElementById('radio-2').checked) {
+           let radio_value = document.getElementById('radio-2').value;
+           console.log(radio_value);
+       }
+    }
+
+
 
 
     find(address, coords){
@@ -163,22 +197,7 @@ class OperationCenter extends React.Component{
     }
 
 
-    onConfirmModal = () => {
-      let password = document.getElementById("formBasicPassword").value;
-      this.setState({ isModal: false})
-      console.log(password);
 
-      if (document.getElementById('radio-1').checked) {
-        let radio_value = document.getElementById('radio-1').value;
-        console.log(radio_value)
-        this.reboot("GeneralParking", "192.168.0.100")
-
-       } else if (document.getElementById('radio-2').checked) {
-        let radio_value = document.getElementById('radio-2').value;
-        console.log(radio_value)
-
-       }
-    }
 
 
    render(){
