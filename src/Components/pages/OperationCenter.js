@@ -51,7 +51,7 @@ class OperationCenter extends React.Component{
         var dict=[]
         for (const [key, value] of Object.entries(snapshot.val())) {
             dict.push({
-              'indicator': <MDBBtn tag="a" size="sm" color="danger" onClick={() => this.reboot_server(key, [value["ipAddress"], value["nameVPN"]])}><MDBIcon icon="redo-alt" /></MDBBtn>,
+              'indicator': <MDBBtn tag="a" size="sm" color="danger" onClick={() => this.reboot_server(key, [value["ipAddress"], value["nameVPN"], value["typeVPN"]])}><MDBIcon icon="redo-alt" /></MDBBtn>,
               'nameparking': key,
               'handle': <MDBBtn color="yellow" size="sm" onClick={() => this.find(key, [value["lat"], value["lon"]])}>Смотреть</MDBBtn>
             });
@@ -62,9 +62,10 @@ class OperationCenter extends React.Component{
 
 
     //Перезагрузка сервера
-    reboot(nameVPN, ipAddress){
+    reboot(nameVPN, ipAddress, typeVPN){
       connectionVPN(nameVPN, function (check) {
         if (check !== "error") {
+          console.log(typeVPN)
           console.log("Включить")
           snmpRequest(ipAddress, 161, ".1.3.6.1.4.1.25728.5800.3.1.3.1", "SET", 0)
           setTimeout(() => {
@@ -84,40 +85,33 @@ class OperationCenter extends React.Component{
 
     onConfirmModal = () => {
       let password = document.getElementById("formBasicPassword").value;
-
-      console.log(password);
-      let test = JSON.parse(localStorage.getItem('user_test'));
-
-      console.log(test.currentUser);
-      console.log(test.currentUser['email']);
+      let user_test = JSON.parse(localStorage.getItem('user_test'));
 
       const auth = getAuth();
+      let radio_1 = document.getElementById('radio-1').checked;
+      let radio_2 = document.getElementById('radio-2').checked;
 
-
-      signInWithEmailAndPassword(auth, test.currentUser['email'], password)
+      signInWithEmailAndPassword(auth, user_test.currentUser['email'], password)
         .then((userCredential) => {
-            console.log('111')
+
+            if (radio_1) {
+                console.log("Перезагрузка сервера");
+                this.reboot(this.value[1], this.value[0], this.value[2]);
+
+
+            } else if (radio_2) {
+                console.log("Перезагрузка реле шлагбаума");
+            }
 
             })
             .catch((error) => {
-            console.log("error")
+                console.log(error)
+
         });
-
-
-
-
 
       this.setState({ isModal: false})
 
-      if (document.getElementById('radio-1').checked) {
-        let radio_value = document.getElementById('radio-1').value;
 
-        this.reboot(this.value[1], this.value[0]);
-
-       } else if (document.getElementById('radio-2').checked) {
-           let radio_value = document.getElementById('radio-2').value;
-           console.log(radio_value);
-       }
     }
 
 
