@@ -27,20 +27,28 @@ class Transactions extends React.Component{
 
       onValue(starCountRef, (snapshot) => {
          if(snapshot.val() == null){
-            var elem = document.getElementsByClassName('address'); 
-            elem[0].innerHTML = "Нет данных"
+            var elem = document.getElementsByClassName('address');
+            if (elem !== undefined) { 
+               elem[0].innerHTML = "Нет данных"
+            }
             this.setState({ data_table: {}})
-            elem = document.getElementsByClassName('price'); 
-            elem[0].innerHTML = ""
+            elem = document.getElementsByClassName('price');
+            if (elem !== undefined) {  
+               elem[0].innerHTML = ""
+            }
             console.log("Error");
             return;
          }
 
-         elem = document.getElementsByClassName('address'); 
-         elem[0].innerHTML = address
+         elem = document.getElementsByClassName('address');
+         if (elem !== undefined) {
+            elem[0].innerHTML = address
+         } 
 
          elem = document.getElementsByClassName('price'); 
-         elem[0].innerHTML = snapshot.val()["balance"] + " руб."
+         if (elem !== undefined) {
+            elem[0].innerHTML = snapshot.val()["balance"] + " руб."
+         } 
 
          var load_data = [];
          for (const [key, value] of Object.entries(snapshot.val()["report"])) {
@@ -92,7 +100,7 @@ class Transactions extends React.Component{
                   </Form.Select>
                   <div className="date"> Дата </div>
                   <div className="date-input"><input type="month" className="date-input-month" id="input_date" defaultValue={this.current_year_month}/></div>
-                  <Button variant='size' type="button" className="btn-find" onClick={this.find}>
+                  <Button variant='size' type="button" className="btn-find" onClick={() => this.find()}>
                      Найти
                   </Button>
                </div>
