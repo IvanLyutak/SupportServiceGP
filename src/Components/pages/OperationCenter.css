@@ -94,6 +94,7 @@ body {
         position: relative;
         top: -0.2em;
         margin-right: 1em;
+        margin-left: 100px;
         vertical-align: top;
         cursor: pointer;
         text-align: center;
@@ -133,4 +134,10 @@ body {
       }
     }
   }
+}
+
+
+.radio-label {
+    margin-left: 3px;
+
 }

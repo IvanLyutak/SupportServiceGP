@@ -63,6 +63,10 @@ class OperationCenter extends React.Component{
 
     //Перезагрузка сервера
     reboot(nameVPN, ipAddress, typeVPN){
+      if (typeVPN == 'OpenVPN') {
+           console.log('Нотификацию сюда')
+      }
+
       connectionVPN(nameVPN, function (check) {
         if (check !== "error") {
           console.log(typeVPN)
@@ -221,11 +225,11 @@ class OperationCenter extends React.Component{
                     <div>
                       <div className="radio">
                         <input id="radio-1" value="server reboot" name="radio" type="radio"/>
-                        <label htmlFor="radio-1" className="radio-label">Перезагрузка сервера</label>
+                        <label htmlFor="radio-1" className="radio-label"> Перезагрузка сервера</label>
                       </div>
                       <div className="radio">
                         <input id="radio-2" value="relay reboot" name="radio" type="radio"/>
-                        <label  htmlFor="radio-2" className="radio-label">Перезагрузка реле шлагбаума</label>
+                        <label  htmlFor="radio-2" className="radio-label"> Перезагрузка реле шлагбаума</label>
                       </div>
                       <Form.Group className="mb-3" controlId="formBasicPassword">
                         <Form.Label>Пароль админа</Form.Label>
