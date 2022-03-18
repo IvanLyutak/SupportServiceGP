@@ -9,11 +9,15 @@ import Transactions from './Components/pages/Transactions';
 import Chat from './Components/pages/Chat';
 import Authorization from './Components/pages/Authorization';
 
+import { ReactNotifications, Store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+
 function App() {
 
   const map_yandex = useRef(null);
   return (
     <main>
+     <ReactNotifications />
       <Router>
       <NavBar />
         <Switch>

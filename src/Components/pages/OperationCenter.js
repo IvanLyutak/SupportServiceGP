@@ -17,6 +17,13 @@ import { MDBBtn, MDBIcon} from 'mdbreact';
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
+import { ReactNotifications, Store } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+
+import Notify from './Notify';
+
+
+
 
 const getPointOptions = () => {
   return {
@@ -37,6 +44,7 @@ class OperationCenter extends React.Component{
       this.reboot = this.reboot.bind(this);
       this.find_coordinates_address = this.find_coordinates_address.bind(this);
       this.reboot_server = this.reboot_server.bind(this);
+
     }
 
 
@@ -51,7 +59,7 @@ class OperationCenter extends React.Component{
         var dict=[]
         for (const [key, value] of Object.entries(snapshot.val())) {
             dict.push({
-              'indicator': <MDBBtn tag="a" size="sm" color="danger" onClick={() => this.reboot_server(key, [value["ipAddress"], value["nameVPN"], value["typeVPN"]])}><MDBIcon icon="redo-alt" /></MDBBtn>,
+              'indicator': <MDBBtn tag="a" size="sm" color="warning" onClick={() => this.reboot_server(key, [value["ipAddress"], value["nameVPN"], value["typeVPN"]])}><MDBIcon icon="redo-alt" /></MDBBtn>,
               'nameparking': key,
               'handle': <MDBBtn color="yellow" size="sm" onClick={() => this.find(key, [value["lat"], value["lon"]])}>Смотреть</MDBBtn>
             });
@@ -95,20 +103,27 @@ class OperationCenter extends React.Component{
       let radio_1 = document.getElementById('radio-1').checked;
       let radio_2 = document.getElementById('radio-2').checked;
 
+      console.log("Перезагрузка реле шлагбаума");
+
+
+
+
       signInWithEmailAndPassword(auth, user_test.currentUser['email'], password)
         .then((userCredential) => {
 
             if (radio_1) {
-                console.log("Перезагрузка сервера");
+                Notify("Перезагрузка", "Сервер перезагружается", "success", 5000);
                 this.reboot(this.value[1], this.value[0], this.value[2]);
-
-
             } else if (radio_2) {
-                console.log("Перезагрузка реле шлагбаума");
+                Notify("Перезагрузка", "Реле шлакбаума перезагружается", "success", 5000);
+
+            } else {
+                Notify("Ошибка", "Выберите тип перезагрузки", "danger", 5000);
             }
 
             })
             .catch((error) => {
+                Notify("Ошибка", "Введён неверный пароль", "danger", 5000);
                 console.log(error)
 
         });
