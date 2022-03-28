@@ -1,0 +1,132 @@
+th:nth-of-type(-n+5) {
+    text-align: left;
+}
+
+.col-1-4 {
+    width: 30%;
+    height: 100%;
+    float: left; 
+}
+.col-1-4-1 {
+    float: top;  
+    height: 220px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-shadow: 0 0 3px;
+    border-radius: 5px;
+}
+.col-1-4-2 {
+    float: top;  
+    height: 220px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 3px;
+    border-radius: 5px;
+}
+.col-3-4 {
+    width: 70%;
+    float: left;  
+  }
+.col-3-4-1 {
+    float: top;  
+      margin-top: 10px;
+      margin-left: 10px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 3px;
+      border-radius: 5px;
+  }
+.col-3-4-1-1 {
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+.report {
+    display: inline-block;
+    margin-top: 15px;
+    margin-left: 20px;
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12pt;
+    font-weight: 600;
+  }
+.name_parking {
+    margin-left: 20px;
+    margin-top: 15px;
+    font-size: 12pt;
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+  }
+.form-select {
+    margin-left: 10px;
+    margin-top: 10px;
+    width: calc(100% - 20px);
+}
+.date {
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 10px;
+    font-size: 12pt;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+  }
+.date-input {
+    margin-left: 10px;
+    margin-top: 10px;
+    width: calc(100% - 20px);
+    height: 35px;
+}
+.date-input-month {
+    margin-left: 0px;
+    margin-top: 0px;
+    width: 100%;
+    height: 100%;
+    border-width: 1px;
+    border-color: rgb(202, 202, 202);
+    border-radius: 5px;
+}
+.btn-find {
+    width: calc(100% - 20px);
+    height: 35px;
+    background: rgb(255, 204, 0);
+    border-width: 0px;
+    color: white;
+    box-shadow: 0 0 0px;
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 10pt;
+    padding: 0;
+}
+.price {
+    display: inline-block;
+    margin-top: 20px;
+    margin-left: 20px;
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+.balance {
+    display: inline-block;
+    margin-top: 30px;
+    margin-left: 20px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+.address {
+    display: inline-block;
+    margin-top: 20px;
+    margin-left: 20px;
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    width: calc(100% - 20px);
+  }
