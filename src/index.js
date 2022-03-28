@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import AppNotification from './AppNotification'
 import reportWebVitals from './reportWebVitals';
-import NotificationProvider from './Components/Notifications/NotificationProvider';
+import NotificationProvider from './components/notifications/NotificationProvider';
 
 ReactDOM.render(
   <React.StrictMode>
