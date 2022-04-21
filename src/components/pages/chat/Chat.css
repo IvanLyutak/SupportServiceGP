@@ -1,0 +1,68 @@
+:root {
+    --color-1: #242526;
+    --color-2: white;
+    --color-3: #0084ff;
+    --color-4: grey;
+    --color-5: #eb4034;
+    --color-6: #333;
+  }
+
+.home_container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    overflow: hidden;
+    height: calc(100vh - 70px);
+    width: 100vw;
+}
+
+.users_container {
+    margin-top: 10px;
+    border-right: 2px solid rgb(0, 0, 0);
+    overflow-y: auto;
+}
+
+.user_wrapper {
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.user_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user_detail {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid rgb(0, 0, 0);
+}
+
+.user_detail h6 { 
+    display: table-cell;
+    text-align: center;
+    font-weight: 600;
+    width: 100%;
+}
+
+.messages_container {
+    position: relative;
+    width: 100%;
+}
+
+.messages_user {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px solid rgb(0, 0, 0);
+}
+
+.no_conv {
+    font-size: 20px;
+    color: var(--color-4);
+    text-align: center;
+    margin-top: 10px;
+}

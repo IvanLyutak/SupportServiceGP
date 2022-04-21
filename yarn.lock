@@ -10931,6 +10931,11 @@ react-modal@^3.8.1:
     react-lifecycles-compat "^3.0.0"
     warning "^4.0.3"
 
+react-moment@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-moment/-/react-moment-1.1.2.tgz#a9b157c58ddd226a2f746e5ca43415b24a17b6af"
+  integrity sha512-lfb+shYXI2tXlQrNUpNr05/1D/kzFj8Isbfp89DQrpZk0fs2JIAnLHWETR0hQS9zvtzwLWlVv0wKLffbue5HoA==
+
 react-notifications-component@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/react-notifications-component/-/react-notifications-component-3.4.1.tgz#3670aa17210a4e63ba3b4f553853bd99ab6a0150"
