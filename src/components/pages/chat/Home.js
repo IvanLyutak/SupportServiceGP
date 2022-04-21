@@ -56,9 +56,8 @@ const Home = () => {
         e.preventDefault()
 
         const user2 = chat.uid
-        const id = user1 > user2 ? `${user1 + user2}` : `${user2 + user1}`;
-        
-        console.log(id)
+
+        console.log(user2)
     }
     return (
                     <div className='home_container'>
