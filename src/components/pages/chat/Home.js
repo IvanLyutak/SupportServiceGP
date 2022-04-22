@@ -7,7 +7,7 @@ import Message from './Message';
 import './Chat.css'
 
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue} from "firebase/database";
+import { getDatabase, ref, onValue, set, push} from "firebase/database";
 import firebaseConfig from "../../../FirebaseConfig";
 const Home = () => {
 
@@ -15,11 +15,17 @@ const Home = () => {
     const [chat, setChat] = useState("");
     const [text, setText] = useState("");
     const [msgs, setMsgs] = useState([]);
-    const user1 = JSON.parse(sessionStorage.getItem('user')).uid
+    const user1 = JSON.parse(sessionStorage.getItem('user'))
+
+    const db = getDatabase(initializeApp(firebaseConfig));
+
+    const starCountRef = ref(db, 'user-messages/');
+
+    const postRef = ref(db, 'messages/');
+
+
 
     useEffect(() => {
-        const db = getDatabase(initializeApp(firebaseConfig));
-        const starCountRef = ref(db, 'user-messages/');
 
         onValue(starCountRef, (snapshot) => {
             if (snapshot.val() == null){
@@ -55,9 +61,33 @@ const Home = () => {
     const handleSubmit = async e => {
         e.preventDefault()
 
-        const user2 = chat.uid
+        const user2 = chat
 
-        console.log(user2)
+        const timestamp = Math.round(Date.now() / 1000);
+
+
+        console.log(user1.email)
+        console.log(user1.uid)
+        console.log(user2.uid)
+        console.log(text)
+
+
+        const postId = push(postRef).key;
+
+        set(ref(db, 'messages/' + postId), {
+          email: user1.email,
+          fromId: user1.uid,
+          text: text,
+          timestamp: timestamp,
+          toId: user2.uid
+        });
+
+
+        set(ref(db, `user-messages/${user1.uid}/${user2.uid}/${postId}`), 1)
+
+        set(ref(db, `user-messages/${user2.uid}/${user1.uid}/${postId}`), 1)
+
+
     }
     return (
                     <div className='home_container'>
@@ -73,7 +103,7 @@ const Home = () => {
                                     <div className="messages">
                                     {msgs.length
                                         ? msgs.map((msg, i) => (
-                                            <Message key={i} msg={msg} user1={user1} />
+                                            <Message key={i} msg={msg} user1={user1.uid} />
                                         ))
                                         : null}
                                     </div>
