@@ -75,7 +75,7 @@ const Home = () => {
         const postId = push(postRef).key;
 
         set(ref(db, 'messages/' + postId), {
-          email: user1.email,
+          email: user2.email,
           fromId: user1.uid,
           text: text,
           timestamp: timestamp,
