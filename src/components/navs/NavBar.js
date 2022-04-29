@@ -30,6 +30,7 @@ class NavBar extends React.Component {
                     <NavLink  to="/parking_attendance" className="nav-items" activeClassName={"nav-link-selected"}>Посещаемость паркингов</NavLink>
                     <NavLink  to="/transactions" className="nav-items" activeClassName={"nav-link-selected"}>Транзакции</NavLink>
                     <NavLink  to="/operations_center" className="nav-items" activeClassName={"nav-link-selected"}>Оперативный центр</NavLink> 
+                    <NavLink  to="/users" className="nav-items" activeClassName={"nav-link-selected"}>Пользователи</NavLink>
                     <NavLink  to="/chat" className="nav-items" activeClassName={"nav-link-selected"}>Чат</NavLink>
                 </Nav>
                 { (JSON.parse(sessionStorage.getItem('user')) !== null) && <Button variant='yellow' className="button-sign" onClick={this.signOut}>Sign Out</Button>}

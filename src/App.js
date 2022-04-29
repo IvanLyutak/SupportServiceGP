@@ -8,6 +8,7 @@ import OperationCenter from './components/pages/operation-center/OperationCenter
 import Transactions from './components/pages/transactions/Transactions';
 import Chat from './components/pages/chat/Chat';
 import Authorization from './components/pages/authorization/Authorization';
+import Users from './components/pages/users/Users';
 
 import { ReactNotifications } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
@@ -26,6 +27,7 @@ function App() {
           <Route path='/operations_center' render={(props) => (
               <OperationCenter map={map_yandex}/>
             )} />
+          <Route path='/users' component={Users} />
           <Route path='/chat' component={Chat} />
           <Route path='/' component={Authorization} />
         </Switch>
