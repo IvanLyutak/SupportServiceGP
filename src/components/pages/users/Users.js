@@ -38,6 +38,7 @@ class Users extends React.Component{
         document.getElementById('phone_number').disabled = true;
         document.getElementById("number_auto").value = "A926ME142";
         document.getElementById("phone_number").value = "+79151756404";
+        document.getElementById("progress_bar_id").setAttribute("style","width:66%; border-radius:20px 0 0 20px;")
     }
     
     render(){
@@ -86,6 +87,34 @@ class Users extends React.Component{
                                 </div>
                             </div>
                             <div className='line' />
+                            <div className='info_booking'>
+                                <div className='main_info_booking'>
+                                    <div className='label_info_booking'>Информация о бронировании</div>
+                                    <div className='label_address_booking'>Большой Саввинский переулок, 11</div>
+                                    <div className='label_place_booking'>85 место</div>
+                                </div>
+                                <div className='general_info_booking'>
+                                    <div className='progress_bar_booking'>
+                                            <div className='status_booking'>
+                                                <div className='label_booking'>Бронирование</div>
+                                                <div className='label_time' id='label_time_booking'>13:07:21 21 марта 2022</div>
+                                            </div>
+                                            <div className='status_arrive'>
+                                                <div className='label_booking'>Заезд на паркинг</div>
+                                                <div className='label_time' id='label_time_arrive'>14:07:21 21 марта 2022</div>
+                                            </div>
+                                            <div className='status_exit'>
+                                                <div className='label_booking'>Выезд из паркинга</div>
+                                                <div className='label_time' id='label_time_exit'></div>
+                                            </div>
+                                            <div className='progress_bar' id='progress_bar_id'></div>
+                                    </div>
+                                    <div className='buttons_booking'>
+                                        <button type="button" className='button_next'> Далее </button>
+                                        <button type="button" className='button_delete'> Удалить </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </>
                 )}

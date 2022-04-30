@@ -159,3 +159,169 @@
     border-radius: 2px;
     margin-top: 20px;
 }
+
+.info_booking {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    
+}
+
+.label_info_booking {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 15pt;
+    display: inline-block;
+    vertical-align: middle;
+    width: 300px;
+}
+
+.label_address_booking {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15pt;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 30px;
+    width: 400px;
+    text-align: center;
+}
+
+.label_place_booking {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15pt;
+    display: inline-block;
+    vertical-align: middle;
+    width: calc( 100% - 730px );
+    text-align: right;
+}
+
+.general_info_booking {
+    margin-top: 20px;
+}
+
+.progress_bar_booking {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100px;
+    width: calc( 100% - 120px );
+    border-radius: 20px;
+    box-shadow: 0 0 2px;
+    border-width: 0px;
+    position: relative;
+}
+
+
+.buttons_booking {
+    display: inline-block;
+    vertical-align: middle;
+    height: 100px;
+    width: 100px;
+    margin-left: 20px;
+}
+
+.button_next {
+    width: 100%;
+    height: 40px;
+    background-color: rgb(251,192,45);
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+.button_next:hover {
+    color: black;
+    box-shadow: 0 0 2px;
+    border-width: 0px;
+}
+
+.button_delete {
+    margin-top: 20px;
+    width: 100%;
+    height: 40px;
+    background-color: rgb(251,192,45);
+    color: white;
+    border-radius: 10px;
+    border: none;
+}
+
+.button_delete:hover {
+    color: black;
+    box-shadow: 0 0 2px;
+    border-width: 0px;
+}
+
+.status_booking {
+    width: 33%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: transparent;
+    position: relative;
+}
+
+.status_arrive {
+    width: 33%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: transparent;
+    position: relative;
+}
+
+.status_exit {
+    width: 34%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: transparent;
+    position: relative;
+}
+
+.label_booking {
+    position: absolute;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13pt;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    height: 50%;
+    text-align: center;
+    z-index:  100;
+} 
+
+.label_booking:after {
+    content: '';
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.label_time {
+    position: absolute;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12pt;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    height: 50%;
+    text-align: center;
+    margin-top: 50px;
+    z-index:  100;
+} 
+
+.label_time:after {
+    content: '';
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.progress_bar {
+    position: absolute;
+    z-index:  50;
+    height: 100px;
+    top: 0;
+    left: 0;
+    background: rgb(251,192,45);
+}
