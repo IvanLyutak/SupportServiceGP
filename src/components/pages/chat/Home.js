@@ -7,7 +7,7 @@ import Message from './Message';
 import './Chat.css'
 
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue, set, push} from "firebase/database";
+import { getDatabase, ref, onValue, set, push, get} from "firebase/database";
 import firebaseConfig from "../../../FirebaseConfig";
 const Home = () => {
 
@@ -35,7 +35,7 @@ const Home = () => {
             var users_data = []
             for(let i = 0; i < Object.keys(snapshot.val()).length; i++) {
                 const ref_user = ref(db, `users/${Object.keys(snapshot.val())[i]}`);
-                onValue(ref_user, (snapshot_user) => {
+                get(ref_user).then((snapshot_user) => { 
                     if (snapshot.val() == null){
                         return
                     }
