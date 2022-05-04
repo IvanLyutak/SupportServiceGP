@@ -15,6 +15,10 @@ const Home = () => {
     const [chat, setChat] = useState("");
     const [text, setText] = useState("");
     const [msgs, setMsgs] = useState([]);
+
+
+
+
     const user1 = JSON.parse(sessionStorage.getItem('user'))
 
     const db = getDatabase(initializeApp(firebaseConfig));
@@ -54,9 +58,41 @@ const Home = () => {
         })
     }, [])
 
+
+
+
+
+
+
+
     const selectUser = (user) => {
         setChat(user)
-    }
+
+        const UserMessagesListRef = ref(db, `user-messages/${user1.uid}/${user.uid}`)
+
+        onValue(UserMessagesListRef, (snapshot) => {
+            var test = []
+
+            for(let i = 0; i < Object.keys(snapshot.val()).length; i++) {
+            const UserMessageRef = ref(db, `messages/${Object.keys(snapshot.val())[i]}`);
+            onValue(UserMessageRef, (inner_snapshot) => {
+                    const message_data = Object(inner_snapshot.val())
+
+                    test.push(message_data)
+
+
+
+                    if (i+1 === Object.keys(inner_snapshot.val()).length) {
+                        console.log('last operation')
+                        console.log(test)
+                        setMsgs(test)
+                        console.log(msgs)
+                    }
+                });
+                }
+
+            });
+        }
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -64,12 +100,6 @@ const Home = () => {
         const user2 = chat
 
         const timestamp = Math.round(Date.now() / 1000);
-
-
-        console.log(user1.email)
-        console.log(user1.uid)
-        console.log(user2.uid)
-        console.log(text)
 
 
         const postId = push(postRef).key;
