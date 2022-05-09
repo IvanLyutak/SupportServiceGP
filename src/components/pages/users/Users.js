@@ -3,7 +3,7 @@ import './Users.css'
 import profileImage from '../../../images/profile_image.jpg'
 
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, get, orderByChild, equalTo, query, update, set } from "firebase/database";
+import { getDatabase, ref, get, orderByChild, equalTo, query, update, set, remove } from "firebase/database";
 import firebaseConfig from "../../../FirebaseConfig";
 
 class Users extends React.Component{
@@ -15,6 +15,7 @@ class Users extends React.Component{
         this.find = this.find.bind(this);
         this.find_data = this.find_data.bind(this);
         this.delete_booking = this.delete_booking.bind(this);
+        this.skip_booking = this.skip_booking.bind(this);
         this.format_date = this.format_date.bind(this);
         this.state = {
             text_number_auto: "Изменить",
@@ -22,7 +23,10 @@ class Users extends React.Component{
             showBooking: false,
             showInfo: "default",
             current_uid: "",
-            current_email: ""
+            current_email: "",
+            current_number_auto: "",
+            booking_stage: "",
+            booking_address: ""
         }
     }
     
@@ -62,6 +66,10 @@ class Users extends React.Component{
                 let data = snapshot.val()
                 let parking_ref = ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places');
                 get(parking_ref).then((snapshot_parking) => {
+                    console.log(snapshot_parking.val())
+                    if (snapshot_parking.val() === null) {
+                        return
+                    }
                     let places = snapshot_parking.val()
                     for(let [key, value] of Object.entries(places)) {
                         if (value["reservation"] === this.state.current_uid) {
@@ -75,20 +83,98 @@ class Users extends React.Component{
                             }
                             set(ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places/' + key), place_parking)
                             
-                            data.time_reservation = ""
-                            data.time_arrive = ""
-                            data.time_exit = ""
-                            data.reservation_address = ""
-                            data.reservation_place = ""
-                            data.reservation_level = ""
-                            data.arrive = ""
-                            data.exit = ""
-                            set(ref(db, 'users/' + this.state.current_uid), data)
-                            this.setState({showBooking: false})
                         }
                     }
                 })
+                data.time_reservation = ""
+                data.time_arrive = ""
+                data.time_exit = ""
+                data.reservation_address = ""
+                data.reservation_place = ""
+                data.reservation_level = ""
+                data.arrive = ""
+                data.exit = ""
+                set(ref(db, 'users/' + this.state.current_uid), data)
+                
+                remove(ref(db, 'users_car/' + this.state.booking_address + "/" + this.state.current_number_auto))
+                this.setState({showBooking: false})
+                this.setState({booking_stage: ""})
             })
+        }
+    }
+
+    skip_booking = () => {
+        var percent = 0
+        var datestring = ""
+        switch (this.state.booking_stage) {
+            case "reservation":
+                let db1 = getDatabase(initializeApp(firebaseConfig));
+
+                var d = new Date();
+                datestring = d.getUTCFullYear() + "-" + ("0"+(d.getUTCMonth()+1)).slice(-2) + "-" + ("0" + d.getUTCDate()).slice(-2) + " " + ("0" + d.getUTCHours()).slice(-2) + ":" + ("0" + d.getUTCMinutes()).slice(-2) + ":" + ("0" + d.getUTCSeconds()).slice(-2) + "." + (d.getUTCMilliseconds()) + "000";
+                
+                set(ref(db1, 'users/' + this.state.current_uid + '/time_arrive'), datestring)
+                set(ref(db1, 'users/' + this.state.current_uid + '/arrive'), datestring)
+                
+                percent = 66
+                this.setState({booking_stage: "arrive"})
+
+                let time_arrive = this.format_date(new Date(datestring.split('.')[0] + ' UTC'))
+                document.getElementById('label_time_arrive').innerHTML = time_arrive
+                document.getElementById("progress_bar_id").setAttribute("style",`width:${percent}%; border-radius:20px 0 0 20px;`)
+
+                return
+            case "arrive":
+                let db = getDatabase(initializeApp(firebaseConfig));
+
+                var d = new Date();
+                datestring = d.getUTCFullYear() + "-" + ("0"+(d.getUTCMonth()+1)).slice(-2) + "-" + ("0" + d.getUTCDate()).slice(-2) + " " + ("0" + d.getUTCHours()).slice(-2) + ":" + ("0" + d.getUTCMinutes()).slice(-2) + ":" + ("0" + d.getUTCSeconds()).slice(-2) + "." + (d.getUTCMilliseconds()) + "000";
+                
+                let user_ref = ref(db, 'users/'+ this.state.current_uid);
+                get(user_ref).then((snapshot) => {
+                    let data = snapshot.val()
+                    let parking_ref = ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places');
+                    get(parking_ref).then((snapshot_parking) => {
+                        if (snapshot_parking.val() === undefined) {
+                            return
+                        }
+                        let places = snapshot_parking.val()
+                        for(let [key, value] of Object.entries(places)) {
+                            if (value["reservation"] === this.state.current_uid) {
+                                let place_parking = {
+                                    name: value["name"],
+                                    reservation: " ",
+                                    rotate: value["rotate"],
+                                    value: 0,
+                                    x: value["x"],
+                                    y: value["y"]
+                                }
+                                set(ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places/' + key), place_parking)
+                                
+                                data.time_exit = datestring
+                                data.reservation_address = ""
+                                data.reservation_place = ""
+                                data.reservation_level = ""
+                                data.arrive = ""
+                                set(ref(db, 'users/' + this.state.current_uid), data)
+                                remove(ref(db, 'users_car/' + this.state.booking_address + "/" + this.state.current_number_auto))
+
+                                set(ref(db, 'users/' + this.state.current_uid + '/exit'), datestring)
+                            }
+                        }
+                    })
+                })
+
+                percent = 100
+                this.setState({booking_stage: "exit"})
+
+                let time_exit = this.format_date(new Date(datestring.split('.')[0] + ' UTC'))
+                document.getElementById('label_time_exit').innerHTML = time_exit
+                document.getElementById("progress_bar_id").setAttribute("style",`width:${percent}%; border-radius:20px;`)
+                return
+            case "exit":
+                this.delete_booking()
+                return
         }
     }
 
@@ -121,24 +207,28 @@ class Users extends React.Component{
                 this.setState({current_uid: key})
 
                 document.getElementById('user_email').innerHTML = value["email"]
-                this.setState({current_umail: value["email"]})
+                this.setState({current_email: value["email"]})
 
                 document.getElementById('user_name').innerHTML = value["meta_user_info"]["name"] 
                 document.getElementById('user_phone_number').innerHTML = value["meta_user_info"]["phone_number"]  
 
                 document.getElementById("number_auto").value = value["number_auto"]
+                this.setState({current_number_auto: value["number_auto"]})
+
                 document.getElementById("account_balance").value = value["account_balance"]
 
                 if (value["time_reservation"] !== "") {
                     this.setState({showBooking: true})
 
                     document.getElementById('address_booking').innerHTML = value["reservation_address"]
+                    this.setState({booking_address: value["reservation_address"]})
                     document.getElementById('place_booking').innerHTML = value["reservation_place"] + " место"
 
                     var percent = 0
                     if (value["time_reservation"] !== "") {
                         percent = 33
-
+                        
+                        this.setState({booking_stage: "reservation"})
                         document.getElementById('label_time_booking').innerHTML = ""
                         document.getElementById('label_time_arrive').innerHTML = ""
                         document.getElementById('label_time_exit').innerHTML = ""
@@ -148,6 +238,7 @@ class Users extends React.Component{
                     }
                     if (value["time_arrive"] !== "") {
                         percent = 66
+                        this.setState({booking_stage: "arrive"})
 
                         let time_arrive = this.format_date(new Date((value["time_arrive"]).split('.')[0] + ' UTC'))
                         document.getElementById('label_time_arrive').innerHTML = time_arrive
@@ -156,6 +247,7 @@ class Users extends React.Component{
                     
                     if (value["time_exit"] !== "") {
                         percent = 100
+                        this.setState({booking_stage: "exit"})
 
                         let time_exit = this.format_date(new Date((value["time_exit"]).split('.')[0] + ' UTC'))
                         document.getElementById('label_time_exit').innerHTML = time_exit
@@ -253,7 +345,7 @@ class Users extends React.Component{
                                                     <div className='progress_bar' id='progress_bar_id'></div>
                                             </div>
                                             <div className='buttons_booking'>
-                                                <button type="button" className='button_next'> Пропустить </button>
+                                                <button type="button" className='button_next' onClick={this.skip_booking}> Пропустить </button>
                                                 <button type="button" className='button_delete' onClick={this.delete_booking}> Удалить </button>
                                             </div>
                                         </div>
