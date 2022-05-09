@@ -3,41 +3,92 @@ import './Users.css'
 import profileImage from '../../../images/profile_image.jpg'
 
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, get, orderByChild, equalTo, query } from "firebase/database";
+import { getDatabase, ref, get, orderByChild, equalTo, query, update, set } from "firebase/database";
 import firebaseConfig from "../../../FirebaseConfig";
 
 class Users extends React.Component{
 
     constructor(){
         super();
-        this.change = this.change.bind(this);
+        this.change_account_balance = this.change_account_balance.bind(this);
+        this.change_number_auto = this.change_number_auto.bind(this);
         this.find = this.find.bind(this);
+        this.find_data = this.find_data.bind(this);
+        this.delete_booking = this.delete_booking.bind(this);
         this.format_date = this.format_date.bind(this);
         this.state = {
             text_number_auto: "Изменить",
-            text_phone_number: "Изменить",
+            text_account_balance: "Изменить",
             showBooking: false,
-            showInfo: "default"
+            showInfo: "default",
+            current_uid: "",
+            current_email: ""
         }
     }
     
-    change = (str) => {
-        if (str === 'number_auto') {
-            if (this.state.text_number_auto === "Изменить") {
-                document.getElementById(str).disabled = false;
-                this.setState({text_number_auto: "Сохранить"})
-            } else {
-                document.getElementById(str).disabled = true;
-                this.setState({text_number_auto: "Изменить"})
-            }
+    change_number_auto = () => {
+        if (this.state.text_number_auto === "Изменить") {
+            document.getElementById("number_auto").disabled = false;
+            this.setState({text_number_auto: "Сохранить"})
         } else {
-            if (this.state.text_phone_number === "Изменить") {
-                document.getElementById(str).disabled = false;
-                this.setState({text_phone_number: "Сохранить"})
-            } else {
-                document.getElementById(str).disabled = true;
-                this.setState({text_phone_number: "Изменить"})
-            }
+            const db = getDatabase(initializeApp(firebaseConfig));
+            const updates = {};
+            updates['/users/' + this.state.current_uid + '/number_auto'] = document.getElementById("number_auto").value ;
+            update(ref(db), updates);
+            document.getElementById("number_auto").disabled = true;
+            this.setState({text_number_auto: "Изменить"})
+        }
+    }
+
+    change_account_balance = () => {
+        if (this.state.text_account_balance === "Изменить") {
+            document.getElementById("account_balance").disabled = false;
+            this.setState({text_account_balance: "Сохранить"})
+        } else {
+            const db = getDatabase(initializeApp(firebaseConfig));
+            const updates = {};
+            updates['/users/' + this.state.current_uid + '/account_balance'] = Number(document.getElementById("account_balance").value) ;
+            update(ref(db), updates);
+            document.getElementById("account_balance").disabled = true;
+            this.setState({text_account_balance: "Изменить"})
+        }
+    }
+
+    delete_booking = () => {
+        if (this.state.current_uid !== "") {
+            const db = getDatabase(initializeApp(firebaseConfig));
+            let user_ref = ref(db, 'users/'+ this.state.current_uid);
+            get(user_ref).then((snapshot) => {
+                let data = snapshot.val()
+                let parking_ref = ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places');
+                get(parking_ref).then((snapshot_parking) => {
+                    let places = snapshot_parking.val()
+                    for(let [key, value] of Object.entries(places)) {
+                        if (value["reservation"] === this.state.current_uid) {
+                            let place_parking = {
+                                name: value["name"],
+                                reservation: " ",
+                                rotate: value["rotate"],
+                                value: 0,
+                                x: value["x"],
+                                y: value["y"]
+                            }
+                            set(ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places/' + key), place_parking)
+                            
+                            data.time_reservation = ""
+                            data.time_arrive = ""
+                            data.time_exit = ""
+                            data.reservation_address = ""
+                            data.reservation_place = ""
+                            data.reservation_level = ""
+                            data.arrive = ""
+                            data.exit = ""
+                            set(ref(db, 'users/' + this.state.current_uid), data)
+                            this.setState({showBooking: false})
+                        }
+                    }
+                })
+            })
         }
     }
 
@@ -53,7 +104,11 @@ class Users extends React.Component{
     find = (email) => {
         const db = getDatabase(initializeApp(firebaseConfig));
         const starCountRef = query(ref(db, 'users'), orderByChild('email'), equalTo(email));
-
+        this.find_data(starCountRef)
+        
+    }
+    
+    find_data(starCountRef) {
         get(starCountRef).then((snapshot) => {
             if (snapshot.exists()) {
               Object.entries(snapshot.val()).forEach(([key, value]) => {
@@ -63,7 +118,11 @@ class Users extends React.Component{
                 document.getElementById('account_balance').disabled = true;
 
                 document.getElementById('user_id').innerHTML = key
+                this.setState({current_uid: key})
+
                 document.getElementById('user_email').innerHTML = value["email"]
+                this.setState({current_umail: value["email"]})
+
                 document.getElementById('user_name').innerHTML = value["meta_user_info"]["name"] 
                 document.getElementById('user_phone_number').innerHTML = value["meta_user_info"]["phone_number"]  
 
@@ -106,8 +165,6 @@ class Users extends React.Component{
 
                 } else {
                     this.setState({showBooking: false})
-                    document.getElementById('address_booking').innerHTML = ""
-                    document.getElementById('place_booking').innerHTML = ""
                 }
              });             
             } else {
@@ -118,7 +175,7 @@ class Users extends React.Component{
                 console.error(error);
           });
     }
-    
+
     render(){
         return (
         <>
@@ -158,20 +215,25 @@ class Users extends React.Component{
                                         <div className='parent_element_info'>
                                             <div className='main_type_element_info'>Номер авто</div>
                                             <input type="text" className='main_value_element_info' id='number_auto'/>
-                                            <button type="button" className='button_fix' id='button_number_auto' onClick={() => {this.change('number_auto')}  }> {this.state.text_number_auto} </button>
+                                            <button type="button" className='button_fix' id='button_number_auto' onClick={this.change_number_auto}> {this.state.text_number_auto} </button>
                                         </div>
                                         <div className='parent_element_info'>
                                             <div className='main_type_element_info'>Баланс аккаунта</div>
                                             <input type="text" className='main_value_element_info' id='account_balance'/>
-                                            <button type="button" className='button_fix' id='button_account_balance' onClick={() => {this.change('account_balance')}}> {this.state.text_phone_number} </button>
+                                            <button type="button" className='button_fix' id='button_account_balance' onClick={this.change_account_balance}> {this.state.text_account_balance} </button>
                                         </div>
                                     </div>
                                     <div className='line' />
                                     <div className='info_booking'>
                                         <div className='main_info_booking'>
                                             <div className='label_info_booking'>Информация о бронировании</div>
-                                            <div className='label_address_booking' id='address_booking'></div>
-                                            <div className='label_place_booking' id='place_booking'></div>
+                                            { this.state.showBooking ?
+                                            <>
+                                                <div className='label_address_booking' id='address_booking'></div>
+                                                <div className='label_place_booking' id='place_booking'></div>
+                                            </>
+                                            : null
+                                            }    
                                         </div>
                                         { this.state.showBooking ?
                                         <div className='general_info_booking'>
@@ -191,8 +253,8 @@ class Users extends React.Component{
                                                     <div className='progress_bar' id='progress_bar_id'></div>
                                             </div>
                                             <div className='buttons_booking'>
-                                                <button type="button" className='button_next'> Далее </button>
-                                                <button type="button" className='button_delete'> Удалить </button>
+                                                <button type="button" className='button_next'> Пропустить </button>
+                                                <button type="button" className='button_delete' onClick={this.delete_booking}> Удалить </button>
                                             </div>
                                         </div>
                                     : <div className='label_no_booking'>

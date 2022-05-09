@@ -7,8 +7,9 @@ import Message from './Message';
 import './Chat.css'
 
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue, set, push, get} from "firebase/database";
+import { getDatabase, ref, onValue, set, push, get, onChildAdded, limitToLast, query } from "firebase/database";
 import firebaseConfig from "../../../FirebaseConfig";
+
 const Home = () => {
 
     const [users, setUsers] = useState([]);
@@ -16,83 +17,76 @@ const Home = () => {
     const [text, setText] = useState("");
     const [msgs, setMsgs] = useState([]);
 
-
-
-
     const user1 = JSON.parse(sessionStorage.getItem('user'))
 
     const db = getDatabase(initializeApp(firebaseConfig));
 
-    const starCountRef = ref(db, 'user-messages/');
-
     const postRef = ref(db, 'messages/');
 
-
-
     useEffect(() => {
-
-        onValue(starCountRef, (snapshot) => {
-            if (snapshot.val() == null){
+        let currentUser = JSON.parse(sessionStorage.getItem('user')).uid
+        onValue(ref(db, `user-messages/${currentUser}/`), (snapshot) => {
+            if (snapshot.val() == undefined){
                 return
             }
-            let currentUser = JSON.parse(sessionStorage.getItem('user')).uid
             var users_data = []
-            for(let i = 0; i < Object.keys(snapshot.val()).length; i++) {
-                const ref_user = ref(db, `users/${Object.keys(snapshot.val())[i]}`);
-                get(ref_user).then((snapshot_user) => { 
-                    if (snapshot.val() == null){
+            Object.keys(snapshot.val()).forEach((item) => {
+                const ref_last_message = query(ref(db, `user-messages/${user1.uid}/${item}`), limitToLast(1));
+                get(ref_last_message).then((snapshot_last_message) => {
+                    if (snapshot_last_message.val() == undefined){
                         return
                     }
-                    let dictionary = snapshot_user.val()
-                    if(Object.keys(snapshot.val())[i] !== currentUser){
+                    let message = Object.keys(snapshot_last_message.val())[0];
+                    get(ref(db, `messages/${message}/`)).then((snapshot_message) => { 
+                        if (snapshot_message.val() == null){
+                            return
+                        }
+                        let dictionary = snapshot_message.val()
+                        
+                        // Последнее сообщение
                         users_data.push({
-                            uid: Object.keys(snapshot.val())[i],
-                            email: dictionary.email
+                            uid: item,
+                            email: dictionary.email,
+                            timestamp: dictionary.timestamp,
+                            text: dictionary.text
                         })
-                    }
-                    if (i+1 === Object.keys(snapshot.val()).length) {
-                        setUsers(users_data)
-                    }
-                })
-            }
+                        users_data.sort((a, b) => a.timestamp < b.timestamp ? 1 : -1);
+                        if (users_data.length === Object.keys(snapshot.val()).length) {
+                            setUsers(users_data);
+                        }
+                    })
+            })
+            })
         })
-    }, [])
+    }, []) 
 
-
-
-
-
-
-
-
-    const selectUser = (user) => {
+    const selectUser = async (user) => {
+        setText("")
         setChat(user)
-
-        const UserMessagesListRef = ref(db, `user-messages/${user1.uid}/${user.uid}`)
-
-        onValue(UserMessagesListRef, (snapshot) => {
-            var test = []
-
-            for(let i = 0; i < Object.keys(snapshot.val()).length; i++) {
-            const UserMessageRef = ref(db, `messages/${Object.keys(snapshot.val())[i]}`);
-            onValue(UserMessageRef, (inner_snapshot) => {
-                    const message_data = Object(inner_snapshot.val())
-
-                    test.push(message_data)
-
-
-
-                    if (i+1 === Object.keys(inner_snapshot.val()).length) {
-                        console.log('last operation')
-                        console.log(test)
-                        setMsgs(test)
-                        console.log(msgs)
+        const UserMessagesListRef = ref(db, `user-messages/${user1.uid}/${user.uid}`);
+        onValue(UserMessagesListRef, (data) => {
+            if (data.val() == undefined){
+                return
+            }
+            var messages = []
+            Object.keys(data.val()).forEach((item) => {
+                const UserMessageRef = ref(db, `messages/${item}`);
+                get(UserMessageRef).then((inner_snapshot) => { 
+                    if (inner_snapshot.val() == undefined){
+                        return
+                    }
+                    messages.push(Object(inner_snapshot.val()))
+                    messages.sort((a, b) => a.timestamp > b.timestamp ? 1 : -1);
+                    if (messages.length === Object.keys(data.val()).length) {
+                        setMsgs(messages);
                     }
                 });
-                }
+        });
+        });
+    }
 
-            });
-        }
+    
+
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -116,7 +110,7 @@ const Home = () => {
         set(ref(db, `user-messages/${user1.uid}/${user2.uid}/${postId}`), 1)
 
         set(ref(db, `user-messages/${user2.uid}/${user1.uid}/${postId}`), 1)
-
+        setText("")
 
     }
     return (
