@@ -7,7 +7,7 @@ const MessageForm = ({ handleSubmit, text, setText, setImg }) => {
     <form className="message_form">
 
      <div className="inline_class">
-        <input type="text" className='dns' placeholder="Поиск" value={text} onChange={(e) => setText(e.target.value)} id='email_textfield'/>
+        <input type="text" className='dns' placeholder="Напишите сообщение..." value={text} onChange={(e) => setText(e.target.value)} id='email_textfield'/>
         <input type="button" value="Отправить" className='button_find' onClick={handleSubmit}/>
     </div>
 

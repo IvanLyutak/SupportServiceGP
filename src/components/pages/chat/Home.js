@@ -91,25 +91,33 @@ const Home = () => {
     const handleSubmit = async e => {
         e.preventDefault()
 
-        const user2 = chat
+        if (text.length > 0) {
 
-        const timestamp = Math.round(Date.now() / 1000);
+            const user2 = chat
 
-
-        const postId = push(postRef).key;
-
-        set(ref(db, 'messages/' + postId), {
-          email: user2.email,
-          fromId: user1.uid,
-          text: text,
-          timestamp: timestamp,
-          toId: user2.uid
-        });
+            const timestamp = Math.round(Date.now() / 1000);
 
 
-        set(ref(db, `user-messages/${user1.uid}/${user2.uid}/${postId}`), 1)
+            const postId = push(postRef).key;
 
-        set(ref(db, `user-messages/${user2.uid}/${user1.uid}/${postId}`), 1)
+            set(ref(db, 'messages/' + postId), {
+              email: user2.email,
+              fromId: user1.uid,
+              text: text,
+              timestamp: timestamp,
+              toId: user2.uid
+            });
+
+
+
+
+            set(ref(db, `user-messages/${user1.uid}/${user2.uid}/${postId}`), 1)
+
+            set(ref(db, `user-messages/${user2.uid}/${user1.uid}/${postId}`), 1)
+
+
+        }
+
         setText("")
 
     }
