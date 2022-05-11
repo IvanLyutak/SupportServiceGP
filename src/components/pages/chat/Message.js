@@ -18,8 +18,7 @@ const Message = ({ msg, user1 }) => {
         {msg.text}
         <br />
         <small>
-          <Moment fromNow>{msg.timestamp}</Moment>
-          <p>{msg.timestamp}</p>
+          <Moment format="HH:mm D MMM YYYY" unix>{msg.timestamp}</Moment>
         </small>
       </p>
     </div>
