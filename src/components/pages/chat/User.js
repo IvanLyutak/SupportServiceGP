@@ -12,22 +12,53 @@ import './Chat.css'
                 <div className='user_info'>
                     <div className='user_detail'>
 
-                        <div className='user_email'>
-                            <h6>{ user.email}</h6>
-                        </div>
 
-                        <div className='user_text'>
-                            <h6>{ user.text}</h6>
-                        </div>
+                     <div className="user_email">
+                        <h6>{ user.email }</h6>
+                     </div>
 
 
-                        <div className='user_timestamp'>
+
+                     <>
+                      { (user.timestamp > Math.floor(Date.now() / 1000) - 86400) ? (
+                        <div className="user_timestamp">
                             <small>
-                                <Moment format="HH:mm D MMM" unix>{ user.timestamp }</Moment>
+                                <Moment format="HH:mm" unix>{ user.timestamp }</Moment>
                             </small>
                         </div>
+                          ) : (
+                            (user.timestamp > Math.floor(Date.now() / 1000) - 604800) ? (
+                            <div className="user_timestamp">
+                                <small>
+                                    <Moment format="dddd" unix>{ user.timestamp }</Moment>
+                                </small>
+                            </div>
+
+                            ) : (
+                            <div className="user_timestamp">
+                                <small>
+                                    <Moment format="MM.DD.YYYY" unix>{ user.timestamp }</Moment>
+                                </small>
+                            </div>
 
 
+                            )
+
+
+                      )}
+                    </>
+
+
+
+
+
+
+
+
+
+                    <div className="user_text">
+                        <h6>{ user.text }</h6>
+                     </div>
 
 
 
