@@ -333,3 +333,19 @@
     font-weight: 100;
     color: #bababa;
 }
+
+.button_delete_user {
+    width: 100%;
+    height: 40px;
+    background-color: rgb(251,192,45);
+    color: white;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.button_delete_user:hover {
+    color: black;
+    box-shadow: 0 0 2px;
+    border-width: 0px;
+}

@@ -4,7 +4,12 @@ import profileImage from '../../../images/profile_image.jpg'
 
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, get, orderByChild, equalTo, query, update, set, remove } from "firebase/database";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import firebaseConfig from "../../../FirebaseConfig";
+import delete_user from './deleteUsers';
+import OperationCenterModal from '../operation-center/OperationCenterModal'
+import { Form, Button } from 'react-bootstrap'
+import Notify from '../../notifications/Notify';
 
 class Users extends React.Component{
 
@@ -26,7 +31,8 @@ class Users extends React.Component{
             current_email: "",
             current_number_auto: "",
             booking_stage: "",
-            booking_address: ""
+            booking_address: "",
+            isModal: false
         }
     }
     
@@ -268,6 +274,29 @@ class Users extends React.Component{
           });
     }
 
+    onConfirmModal = () => {
+        let password = document.getElementById("formBasicPassword").value;
+        let user = JSON.parse(sessionStorage.getItem('user'));
+  
+        const auth = getAuth();
+  
+        signInWithEmailAndPassword(auth, user['email'], password)
+            .then((userCredential) => {
+                delete_user(this.state.current_uid)
+                Notify("Удаление", "Пользователь удален", "success", 5000);
+                this.setState({showInfo: 'no_data'})
+            })
+            .catch((error) => {
+                Notify("Ошибка", "Введён неверный пароль", "danger", 5000);
+                console.log(error)
+          });
+        this.setState({ isModal: false})
+      }
+      
+    onClose = () => {
+        this.setState({ isModal: false})
+    }
+
     render(){
         return (
         <>
@@ -275,6 +304,29 @@ class Users extends React.Component{
                 <div className="welcome-user"> Авторизуйтесь! </div>
                 ) : (
                     <>
+                        <OperationCenterModal
+                            visible={this.state.isModal}
+                            title="Подтверждение действия"
+                            content={
+                                <div>
+                                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                                        <Form.Label>Пароль админа</Form.Label>
+                                        <Form.Control type="password" placeholder="Password"/>
+                                    </Form.Group>
+                                </div>
+                            }
+                            footer={
+                                <div>
+                                    <Button variant='size' type="submit" className="btn_close" onClick={this.onClose}>
+                                        Отмена
+                                    </Button>
+                                    <Button variant='size' type="submit" className="btn_reboot" onClick={this.onConfirmModal}>
+                                        Удалить
+                                    </Button>
+                                </div>
+                            }
+                            onClose={this.onClose}
+                            />
                         <div className='window'>
                             <div className='label_users'>Пользователи</div>
                             <div>
@@ -352,7 +404,8 @@ class Users extends React.Component{
                                     : <div className='label_no_booking'>
                                         Пользователь не бронировал место
                                     </div> }
-                                </div>  
+                                </div>
+                                <button type="button" className='button_delete_user' onClick={() => {this.setState({ isModal: true })}}> Удалить пользователя </button>  
                             </div>
                             :  (this.state.showInfo === 'default') ?
                             <div className='label_no_booking'>
