@@ -139,35 +139,39 @@ class Users extends React.Component{
                 let user_ref = ref(db, 'users/'+ this.state.current_uid);
                 get(user_ref).then((snapshot) => {
                     let data = snapshot.val()
-                    let parking_ref = ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places');
-                    get(parking_ref).then((snapshot_parking) => {
-                        if (snapshot_parking.val() === undefined) {
-                            return
-                        }
-                        let places = snapshot_parking.val()
-                        for(let [key, value] of Object.entries(places)) {
-                            if (value["reservation"] === this.state.current_uid) {
-                                let place_parking = {
-                                    name: value["name"],
-                                    reservation: " ",
-                                    rotate: value["rotate"],
-                                    value: 0,
-                                    x: value["x"],
-                                    y: value["y"]
-                                }
-                                set(ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places/' + key), place_parking)
-                                
-                                data.time_exit = datestring
-                                data.reservation_address = ""
-                                data.reservation_place = ""
-                                data.reservation_level = ""
-                                data.arrive = ""
-                                set(ref(db, 'users/' + this.state.current_uid), data)
-                                remove(ref(db, 'users_car/' + this.state.booking_address + "/" + this.state.current_number_auto))
-
-                                set(ref(db, 'users/' + this.state.current_uid + '/exit'), datestring)
+                    let price_parking = ref(db, 'parking_short_info/'+ data.reservation_address + "/price_parking");
+                    get(price_parking).then((snapshot_price_parking) => {
+                        let parking_ref = ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places');
+                        get(parking_ref).then((snapshot_parking) => {
+                            if (snapshot_parking.val() === undefined) {
+                                return
                             }
-                        }
+                            let places = snapshot_parking.val()
+                            for(let [key, value] of Object.entries(places)) {
+                                if (value["reservation"] === this.state.current_uid) {
+                                    let place_parking = {
+                                        name: value["name"],
+                                        reservation: " ",
+                                        rotate: value["rotate"],
+                                        value: 0,
+                                        x: value["x"],
+                                        y: value["y"]
+                                    }
+                                    set(ref(db, 'parking/'+ data.reservation_address + "/" + data.reservation_level + '/places/' + key), place_parking)
+                                    
+                                    data.time_exit = datestring
+                                    data.reservation_address = ""
+                                    data.reservation_place = ""
+                                    data.reservation_level = ""
+                                    data.price_to_pay = snapshot_price_parking.val()
+                                    data.arrive = ""
+                                    set(ref(db, 'users/' + this.state.current_uid), data)
+                                    remove(ref(db, 'users_car/' + this.state.booking_address + "/" + this.state.current_number_auto))
+
+                                    set(ref(db, 'users/' + this.state.current_uid + '/exit'), datestring)
+                                }
+                            }
+                        })
                     })
                 })
 
@@ -180,6 +184,8 @@ class Users extends React.Component{
                 return
             case "exit":
                 this.delete_booking()
+                return
+            default:
                 return
         }
     }

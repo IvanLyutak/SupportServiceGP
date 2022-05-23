@@ -7,7 +7,7 @@ import Message from './Message';
 import './Chat.css'
 
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue, set, push, get, onChildAdded, limitToLast, query } from "firebase/database";
+import { getDatabase, ref, onValue, set, push, get, limitToLast, query } from "firebase/database";
 import firebaseConfig from "../../../FirebaseConfig";
 
 const Home = () => {
@@ -26,19 +26,19 @@ const Home = () => {
     useEffect(() => {
         let currentUser = JSON.parse(sessionStorage.getItem('user')).uid
         onValue(ref(db, `user-messages/${currentUser}/`), (snapshot) => {
-            if (snapshot.val() == undefined){
+            if (snapshot.val() === undefined){
                 return
             }
             var users_data = []
             Object.keys(snapshot.val()).forEach((item) => {
                 const ref_last_message = query(ref(db, `user-messages/${user1.uid}/${item}`), limitToLast(1));
                 get(ref_last_message).then((snapshot_last_message) => {
-                    if (snapshot_last_message.val() == undefined){
+                    if (snapshot_last_message.val() === undefined){
                         return
                     }
                     let message = Object.keys(snapshot_last_message.val())[0];
                     get(ref(db, `messages/${message}/`)).then((snapshot_message) => { 
-                        if (snapshot_message.val() == null){
+                        if (snapshot_message.val() === null){
                             return
                         }
                         let dictionary = snapshot_message.val()
@@ -65,14 +65,14 @@ const Home = () => {
         setChat(user)
         const UserMessagesListRef = ref(db, `user-messages/${user1.uid}/${user.uid}`);
         onValue(UserMessagesListRef, (data) => {
-            if (data.val() == undefined){
+            if (data.val() === undefined){
                 return
             }
             var messages = []
             Object.keys(data.val()).forEach((item) => {
                 const UserMessageRef = ref(db, `messages/${item}`);
                 get(UserMessageRef).then((inner_snapshot) => { 
-                    if (inner_snapshot.val() == undefined){
+                    if (inner_snapshot.val() === undefined){
                         return
                     }
                     messages.push(Object(inner_snapshot.val()))

@@ -88,9 +88,9 @@ class ParkingAttendance extends React.Component{
    render(){
     return (
         <>
-          {(sessionStorage.getItem('user') === null) ? (
+           {(JSON.parse(sessionStorage.getItem('user')) === null) ? (
             <div className="welcome-user"> Авторизуйтесь! </div>
-              ) : (
+            ) : (
             <div className="parking-attendance-page">
               <Form className="parking-attendance">
                 <TableParkingAttendance data_table={this.state.data_table}/>
