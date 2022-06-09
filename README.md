@@ -28,8 +28,6 @@ yarn build
 ```
 ## Архитектура
 
-## Документация пользователя базы данных
-
 # Документация пользователя
 
 ## Авторизация администратора
@@ -93,3 +91,9 @@ yarn build
 ![Пользователи](https://github.com/IvanLyutak/Images/blob/main/Пользователи.png)
 
 Для удаления пользователя необходимо нажать кнопку `Удалить пользователя` и ввести пароль администратора
+
+# Полезные ссылки
+
+[https://docs.google.com/document/d/1DQVeUMXectKqXcjGpcQl4quEwg8TSSHiw9SurNDWKJg/edit](Документация пользователя базы данных)
+
+[https://docs.google.com/document/d/1DQVeUMXectKqXcjGpcQl4quEwg8TSSHiw9SurNDWKJg/edit](Презентация проекта)
