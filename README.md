@@ -92,8 +92,8 @@ yarn build
 
 Для удаления пользователя необходимо нажать кнопку `Удалить пользователя` и ввести пароль администратора
 
-# Полезные ссылки
+# Полезные ссылки по проекту General Parking
 
-[Документация пользователя базой данных](https://docs.google.com/document/d/1DQVeUMXectKqXcjGpcQl4quEwg8TSSHiw9SurNDWKJg/edit)
+[Документация пользователя базы данных](https://docs.google.com/document/d/1DQVeUMXectKqXcjGpcQl4quEwg8TSSHiw9SurNDWKJg/edit)
 
 [Презентация проекта](https://docs.google.com/document/d/1DQVeUMXectKqXcjGpcQl4quEwg8TSSHiw9SurNDWKJg/edit)
