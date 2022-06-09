@@ -94,9 +94,9 @@ yarn build
 
 # Полезные ссылки по проекту General Parking
 
-[Репозиторий мониторинга медиасервера](https://github.com/IvanLyutak/MonitoringMediaServer)
+[Репозиторий программы мониторинга медиасервера](https://github.com/IvanLyutak/MonitoringMediaServer)
 
-[Репозиторий мониторинга сетевых устройств](https://github.com/IvanLyutak/MonitoringServer)
+[Репозиторий программы мониторинга сетевых устройств](https://github.com/IvanLyutak/MonitoringServer)
 
 [Документация пользователя базы данных](https://docs.google.com/document/d/1DQVeUMXectKqXcjGpcQl4quEwg8TSSHiw9SurNDWKJg/edit)
 
