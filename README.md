@@ -28,7 +28,7 @@ yarn start
 ```bash
 yarn build
 ```
-## Архитектура
+## Архитектура приложения
 
 ## Используемые библиотеки
 
@@ -95,6 +95,14 @@ yarn build
 ![Пользователи](https://github.com/IvanLyutak/Images/blob/main/Пользователи.png)
 
 Для удаления пользователя необходимо нажать кнопку `Удалить пользователя` и ввести пароль администратора
+
+# Общая архитектура проекта General Parking
+
+![Пользователи](https://github.com/IvanLyutak/Images/blob/main/Пользователи.png)
+
+# Обобщенная топология сети General Parking на паркингах
+
+![Пользователи](https://github.com/IvanLyutak/Images/blob/main/Пользователи.png)
 
 # Полезные ссылки проекта General Parking
 
