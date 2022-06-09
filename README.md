@@ -14,7 +14,7 @@ npm install --global yarn
 yarn
 ```
 
-3. Запросить у разработчика файлы firebaseConfig.js и serviceAccountKey.json. Вставить их в папку `src`
+3. Запросить у разработчика файлы firebaseConfig.js и serviceAccountKey.json. Поместить их в папку `src`
 
 4. Запуск:
 ```bash
