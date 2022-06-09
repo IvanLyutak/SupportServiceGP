@@ -1,20 +1,17 @@
 import React from 'react';
 import { Nav, Navbar, Container, Form, Button } from 'react-bootstrap';
-import companyLogo from '../images/logo.png';
+import companyLogo from '../../images/logo.png';
 import './NavBar.css'
 import { NavLink } from 'react-router-dom'
 class NavBar extends React.Component {
     constructor(){
         super();
-        if (localStorage.getItem('user') === null) {
-            localStorage.setItem('user', false);
-        }
         this.signOut = this.signOut.bind(this);
         this.login = this.login.bind(this);
     }
     signOut(){
         console.log("signOut")
-        localStorage.setItem('user', false);
+        sessionStorage.setItem('user', null);
         window.location.href = localStorage.getItem('defaultpage')
       }
     login(){
@@ -33,10 +30,11 @@ class NavBar extends React.Component {
                     <NavLink  to="/parking_attendance" className="nav-items" activeClassName={"nav-link-selected"}>Посещаемость паркингов</NavLink>
                     <NavLink  to="/transactions" className="nav-items" activeClassName={"nav-link-selected"}>Транзакции</NavLink>
                     <NavLink  to="/operations_center" className="nav-items" activeClassName={"nav-link-selected"}>Оперативный центр</NavLink> 
+                    <NavLink  to="/users" className="nav-items" activeClassName={"nav-link-selected"}>Пользователи</NavLink>
                     <NavLink  to="/chat" className="nav-items" activeClassName={"nav-link-selected"}>Чат</NavLink>
                 </Nav>
-                { (JSON.parse(localStorage.getItem('user')) === true) && <Button variant='yellow' className="button-sign" onClick={this.signOut}>Sign Out</Button>}
-                {!(JSON.parse(localStorage.getItem('user')) === true) ? (
+                { (JSON.parse(sessionStorage.getItem('user')) !== null) && <Button variant='yellow' className="button-sign" onClick={this.signOut}>Sign Out</Button>}
+                {!(JSON.parse(sessionStorage.getItem('user')) !== null) ? (
                 <Form className="d-flex">
                     <Button variant='yellow' onClick={this.login}>Login</Button>
                 </Form>

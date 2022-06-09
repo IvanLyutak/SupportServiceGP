@@ -4,16 +4,14 @@ import './Authorization.css'
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getDatabase, ref, onValue} from "firebase/database";
-import firebaseConfig from "../../FirebaseConfig";
+import firebaseConfig from "../../../FirebaseConfig";
 
 class Authorization extends React.Component{
     constructor(){
         super();
-        if (localStorage.getItem('user') === null) {
-            localStorage.setItem('user', false);
-        }
         this.entry = this.entry.bind(this);
-     }
+    }
+    
     entry = (e) => {
         e.preventDefault()
         let email = document.getElementById("formBasicEmail").value;
@@ -22,7 +20,6 @@ class Authorization extends React.Component{
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // Signed in
             const db = getDatabase(initializeApp(firebaseConfig));
             const starCountRef = ref(db, 'admins/');
             onValue(starCountRef, (snapshot) => {
@@ -31,8 +28,7 @@ class Authorization extends React.Component{
                 }
                 else if(snapshot.val().includes(email)){
                     const user = userCredential.user;
-                    console.log(user)
-                    localStorage.setItem('user', true);
+                    sessionStorage.setItem('user', JSON.stringify(user));
                     var elem = document.getElementsByClassName('error-field'); 
                     elem[0].innerHTML = ""
                     window.location.reload();
@@ -46,36 +42,36 @@ class Authorization extends React.Component{
         })
         .catch((error) => {
             console.log("error")
-            var elem = document.getElementsByClassName('error-field'); 
+            var elem = document.getElementsByClassName('error-field');
             elem[0].innerHTML = "Неправильная почта или пароль"
         });
-
     }
-   render(){
-    return (
-        <>
-        {(JSON.parse(localStorage.getItem('user')) === true) ? (
-            <div className="welcome-user"> Welcome User</div>
-            ) : (
-            <Form className="login-form">
-                <FormLabel className="auth_label"> Авторизация </FormLabel>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email"/>
-                </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Пароль</Form.Label>
-                    <Form.Control type="password" placeholder="Password"/>
-                </Form.Group>
-                <Button variant='size' type="submit" className="btn-login" onClick={this.entry}>
-                    Войти
-                </Button>
-                <div className='error-field'></div>
-            </Form>
-            )}
-            </>
-    );
+    render(){
+        return (
+            <>
+                {(JSON.parse(sessionStorage.getItem('user')) !== null) ? (
+                    <div className="welcome-user"> Welcome User</div>
+                    ) : (
+                    <Form className="login-form">
+                        <FormLabel className="auth_label"> Авторизация </FormLabel>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control type="email" placeholder="Enter email"/>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                            <Form.Label>Пароль</Form.Label>
+                            <Form.Control type="password" placeholder="Password"/>
+                        </Form.Group>
+                        <Button variant='size' type="submit" className="btn-login" onClick={this.entry}>
+                            Войти
+                        </Button>
+                        <div className='error-field'></div>
+                    </Form>
+                    )}
+                </>
+        );
    }
 }
 

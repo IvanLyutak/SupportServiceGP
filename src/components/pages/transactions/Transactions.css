@@ -1,3 +1,7 @@
+th:nth-of-type(-n+5) {
+    text-align: left;
+}
+
 .col-1-4 {
     width: 30%;
     height: 100%;
