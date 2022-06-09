@@ -21,7 +21,7 @@ yarn start
 
   Приложение откроется на [http://localhost:3000](http://localhost:3000)
 
-4. Cоздаnm приложение для производства в папке `build`.
+4. Cоздание приложения для производства в папке `build`.
 
 ```bash
 yarn build
