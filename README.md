@@ -98,11 +98,11 @@ yarn build
 
 # Общая архитектура проекта General Parking
 
-![Пользователи](https://github.com/IvanLyutak/Images/blob/main/Пользователи.png)
+![Пользователи](https://github.com/IvanLyutak/Images/blob/main/Архитектура.png)
 
 # Обобщенная топология сети General Parking на паркингах
 
-![Пользователи](https://github.com/IvanLyutak/Images/blob/main/Пользователи.png)
+![Пользователи](https://github.com/IvanLyutak/Images/blob/main/Топология.png)
 
 # Полезные ссылки проекта General Parking
 
