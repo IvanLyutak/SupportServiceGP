@@ -30,7 +30,31 @@ yarn build
 ```
 ## Архитектура приложения
 
+
+
 ## Используемые библиотеки
+  
+  [Bootstrap 5.1.3](https://getbootstrap.com)
+  
+  [Firebase 9.5.0](https://yandex.ru/search/?lr=213&text=firebase+node+js)
+  
+  [Firebase Admin 10.2.0](https://firebase.google.com/support/release-notes/admin/node)
+  
+  [MBDReact 5.2.0](https://mdbootstrap.com/support/cat/react/)
+  
+  [Notify.js 3.0.0](https://www.npmjs.com/package/notifyjs)
+  
+  [nw-react-scripts 4.0.4](https://www.npmjs.com/package/nw-react-scripts)
+  
+  [React 17.0.2](https://reactjs.org)
+  
+  [React Bootstrap 2.0.2](https://react-bootstrap.github.io)
+  
+  [react-moment 1.1.2](https://www.npmjs.com/package/react-moment)
+  
+  [react-yandex-maps 4.6.0](https://reactjsexample.com/yandex-maps-api-bindings-for-react/)
+  
+  [snmp-native 1.2.0](https://yandex.ru/search/?text=snmp-native&lr=213)
 
 # Документация пользователя
 
