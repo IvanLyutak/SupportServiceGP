@@ -163,9 +163,13 @@ services - сервисные методы
 
 # Полезные ссылки проекта General Parking
 
-[Репозиторий программы мониторинга медиасервера](https://github.com/IvanLyutak/MonitoringMediaServer)
+[ПО мониторинга медиасервера](https://github.com/IvanLyutak/MonitoringMediaServer)
 
-[Репозиторий программы мониторинга сетевых устройств](https://github.com/IvanLyutak/MonitoringServer)
+[ПО мониторинга сетевых устройств](https://github.com/IvanLyutak/MonitoringServer)
+
+[Эмулятор заезда и выезда из паркинга для тестовой БД](https://github.com/IvanLyutak/TestEmulators)
+
+[Эмулятор заезда и выезда из паркинга для основной БД](https://github.com/IvanLyutak/Emulators)
 
 [Документация пользователя базы данных](https://docs.google.com/document/d/1DQVeUMXectKqXcjGpcQl4quEwg8TSSHiw9SurNDWKJg/edit)
 
